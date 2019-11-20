@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:th="http://www.thymeleaf.org">
+<th:block th:include="~{fragments/head}"/>
+<body>
+<main>
+    <th:block th:include="~{fragments/user-navbar}"/>
+
+    <div class="container">
+        <div class="text-center mb-3">
+            <h4 class="text-white mt-2">Welcome to the arena, <p th:text="${session.user.getUsername()}"></p></h4>
+        </div>
+        <th:outputText value="&lt;div class=&quot;row mb-4 d-flex justify-content-around&quot;&gt;"
+                      escape="false" rendered="#{status.index % 2 == 0}"/>
+        <div class="row mb-4 d-flex justify-content-around">
+            <div class="col-md-3 d-flex flex-column text-center mb-3">
+
+                <a href="/events/events">
+                    <img th:src="@{/img/events.jpg}" width="300" height="300"/>
+                    <h2 style="color: #fff">Events</h2>
+                </a>
+            </div>
+
+        </div>
+
+        <div class="row mb-4 d-flex justify-content-around">
+            <div class="col-md-3 d-flex flex-column text-center mb-3">
+                <a href="/store/offer-index">
+                    <img th:src="@{/img/store.png}" width="300" height="300"/>
+                    <h2 style="color: #fff">Store</h2>
+                </a>
+
+            </div>
+
+        </div>
+
+        <div class="row mb-4 d-flex justify-content-around">
+            <div class="col-md-3 d-flex flex-column text-center mb-3">
+                <a href="/videos/videos">
+                <img th:src="@{/img/video.png}" width="300" height="300" />
+                    <h2 style="color: #fff">Videos</h2>
+                </a>
+            </div>
+
+        </div>
+
+        <div class="row mb-4 d-flex justify-content-around">
+            <div class="col-md-3 d-flex flex-column text-center mb-3">
+
+
+                <a href="/news/news">
+                    <img th:src="@{/img/forum.png}" width="300" height="300"/>
+                    <h2 style="color: #fff">News</h2>
+                </a>
+            </div>
+
+        </div>
+        <th:outputText value="&lt;/div&gt;" escape="false" rendered="#{status.index % 2 == 1}"/>
+
+
+
+    </div>
+
+
+    <th:block th:include="~{fragments/footer}"/>
+</main>
+</body>
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:th="http://www.thymeleaf.org">
+<th:block th:include="~{fragments/head}"/>
+<body>
+<main>
+    <th:block th:include="~{fragments/user-navbar}"/>
+
+    <div class="container">
+        <div class="text-center mb-3">
+            <h4 class="text-white mt-2">Welcome to the arena, <p th:text="${session.user.getUsername()}"></p></h4>
+        </div>
+
+        <form class="mx-auto w-15" th:action="@{/store/tshirts}" th:method="post">
+        <th:outputText value="&lt;div class=&quot;row mb-4 d-flex justify-content-around&quot;&gt;"
+                      escape="false" rendered="#{status.index % 4 == 0}"/>
+
+        <table>
+            <th:block th:each="tshirt , iter : ${offers} ">
+
+                <tr class="row mx-auto">
+                    <th class="col-md-1 text-center" th:utext="${iter.index + 1}"></th>
+                    <td class="col-md-3">
+                        <div class="text-center"><img th:src="@{/img/t-shirt.png}" width="40" height="40"
+                                                      alt="quotes">
+                        </div>
+                    </td>
+                    <td class="col-md-3 text-center" th:text="${tshirt.name}"></td>
+                    <td class="col-md-2 text-center" th:text="${tshirt.type}"></td>
+                    <td class="col-md-2 text-center" th:text="${tshirt.size}"></td>
+                    <td class="col-md-2 text-center" th:text="${tshirt.color}"></td>
+                    <td class="col-md-2 text-center" th:text="${tshirt.price}"></td>
+                    <td class="col-md-2 text-center" th:action="@{/events/buyTicket} ">
+                        <a class="btn btn-info mb-2" th:width="300">Add to Card</a>
+                    </td>
+
+                </tr>
+
+            </th:block>
+        </table>
+
+        <th:outputText value="&lt;/div&gt;" escape="false" rendered="#{status.index % 4 == 1}"/>
+
+        </form>
+
+    </div>
+
+
+    <th:block th:include="~{fragments/footer}"/>
+</main>
+</body>
+</html>

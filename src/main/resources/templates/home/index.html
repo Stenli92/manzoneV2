@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:th="http://www.thymeleaf.org">
+<th:block th:include="~{fragments/head}"/>
+<body>
+<main>
+    <th:block th:include="~{fragments/navbar}"/>
+
+    <div class="container">
+        <h1 >Welcome to ManZone</h1>
+        <hr class="my-3"/>
+        <p class="h4">The most furious arena on the web for Football and Rock Music lovers</p>
+        <p class="h4">You will find many people, who share the same disease as yours,
+            to play a game or go to see one or a concert together.</p>
+        <hr class="my-3"/>
+        <h3> <a title="Login" href="/users/login">Login </a> <a>if you have an account or</a>
+            <a title="Register" href="/users/register">Register </a> <a> now and meet the greatest heroes of all time.</a>
+        </h3>
+    </div>
+    <th:block th:include="~{fragments/footer}"/>
+</main>
+</body>
+</html>

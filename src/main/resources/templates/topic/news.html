@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:th="http://www.thymeleaf.org">
+<th:block th:include="~{fragments/head}"/>
+<body>
+<main>
+    <th:block th:include="~{fragments/user-navbar}"/>
+
+    <div class="container">
+        <div class="text-center mb-3">
+            <h4 class="text-white mt-2">Welcome to the arena, <p th:text="${session.user.getUsername()}"></p></h4>
+        </div>
+
+        <form class="mx-auto w-15" th:action="@{news.html}" th:method="post">
+        <th:outputText value="&lt;div class=&quot;row mb-4 d-flex justify-content-around&quot;&gt;"
+                      escape="false" rendered="#{status.index % 4 == 0}"/>
+
+        <table class="text-center">
+
+                <tr>
+                    <div class="row mb-4 d-flex justify-content-around">
+                        <div class="col-md-3 d-flex flex-column text-center mb-3">
+                            <a href="/videos/sport-videos">
+                                <img th:src="@{/img/sportnews.jpg}" width="300" height="300" />
+                                <h2 style="color: #fff">Sports</h2>
+                            </a>
+                        </div>
+
+                    </div>
+                </tr>
+                <tr class="row mx-auto">
+                    <div class="row mb-4 d-flex justify-content-around">
+                        <div class="col-md-3 d-flex flex-column text-center mb-3">
+                            <a href="/videos/music-videos">
+                                <img th:src="@{/img/musicnews.jpg}" width="300" height="300" />
+                                <h2 style="color: #fff">Music</h2>
+                            </a>
+                        </div>
+
+                    </div>
+                </tr>
+        </table>
+
+        <th:outputText value="&lt;/div&gt;" escape="false" rendered="#{status.index % 4 == 1}"/>
+
+        <div class="button-holder d-flex justify-content-center">
+            <a href="/videos/uploadvideo">
+                <h2 style="color: #fff">Upload Video</h2>
+            </a>
+        </div>
+        </form>
+
+    </div>
+
+
+    <th:block th:include="~{fragments/footer}"/>
+</main>
+</body>
+</html>
