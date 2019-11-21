@@ -1,9 +1,11 @@
 package menzonev2.example.demo.web.controllers;
 
 import menzonev2.example.demo.domain.entities.Offer;
+import menzonev2.example.demo.domain.entities.User;
 import menzonev2.example.demo.repositories.OfferRepository;
 import menzonev2.example.demo.services.OfferService;
 import menzonev2.example.demo.web.models.CreateOfferModel;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,7 +13,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import javax.validation.constraints.Size;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @Controller
@@ -20,10 +23,13 @@ public class StoreController {
 
     private final OfferService offerService;
     private final OfferRepository offerRepository;
+    private final HttpServletRequest request;
 
-    public StoreController(OfferService offerService, OfferRepository offerRepository) {
+    @Autowired
+    public StoreController(OfferService offerService, OfferRepository offerRepository, HttpServletRequest request) {
         this.offerService = offerService;
         this.offerRepository = offerRepository;
+        this.request = request;
     }
 
     @GetMapping("/offer-index")
@@ -77,5 +83,19 @@ public class StoreController {
         model.addAttribute("offers" , offers);
 
         return "/offer/accessories.html";
+    }
+
+    @GetMapping("/my-offers")
+    public String myOffers(Model model){
+
+        HttpSession session = request.getSession(true);
+
+        User user = (User) session.getAttribute("user");
+
+        List<CreateOfferModel> offers = this.offerService.getAllOffersByUser(user);
+
+        model.addAttribute("offers" , offers);
+
+        return "/offer/my-offers.html";
     }
 }

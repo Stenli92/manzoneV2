@@ -1,16 +1,18 @@
 package menzonev2.example.demo.domain.entities;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 
 @Entity
 @Table
 public class Event extends BaseEntity{
 
     private String name;
-    private EventType type;
+    private String type;
     private String location;
+    private String date;
     private String time;
-    private Integer price;
+    private BigDecimal price;
     private User user;
 
     public Event() {
@@ -25,18 +27,26 @@ public class Event extends BaseEntity{
         this.name = name;
     }
 
-    @Enumerated(EnumType.STRING)
     @Column(name = "event_type" , nullable = false)
-    public EventType getType() {
+    public String getType() {
         return type;
     }
 
-    public void setType(EventType type) {
+    public void setType(String type) {
         this.type = type;
     }
     @Column(name = "location" , nullable = false)
     public String getLocation() {
         return location;
+    }
+
+    @Column(nullable = false)
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 
     public void setLocation(String location) {
@@ -51,12 +61,21 @@ public class Event extends BaseEntity{
         this.time = time;
     }
     @Column(name = "price" , nullable = false)
-    public Integer getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(Integer price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 
+    @ManyToOne(targetEntity = User.class)
+    @JoinColumn(name = "user_id" , referencedColumnName = "id")
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 }

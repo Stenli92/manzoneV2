@@ -7,6 +7,7 @@ public class CreateEventModel {
     private String name;
     private EventType type;
     private String location;
+    private String date;
     private String time;
     private Integer price;
 
@@ -51,5 +52,13 @@ public class CreateEventModel {
 
     public void setPrice(Integer price) {
         this.price = price;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 }

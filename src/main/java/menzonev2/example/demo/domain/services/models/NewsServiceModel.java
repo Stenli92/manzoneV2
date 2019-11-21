@@ -1,32 +1,22 @@
-package menzonev2.example.demo.domain.entities;
+package menzonev2.example.demo.domain.services.models;
 
-import javax.persistence.*;
-import javax.validation.constraints.Size;
-
-@Entity
-@Table
-public class News extends BaseEntity {
-
+public class NewsServiceModel {
 
     private String title;
     private String topic;
     private String text;
-    private User user;
 
-    public News() {
+    public NewsServiceModel() {
     }
 
-    @Column(nullable = false)
     public String getTitle() {
         return title;
     }
-
 
     public void setTitle(String title) {
         this.title = title;
     }
 
-    @Column(nullable = false)
     public String getTopic() {
         return topic;
     }
@@ -35,8 +25,6 @@ public class News extends BaseEntity {
         this.topic = topic;
     }
 
-    @Column(nullable = false)
-    @Size(max = 10000)
     public String getText() {
         return text;
     }
@@ -44,5 +32,4 @@ public class News extends BaseEntity {
     public void setText(String text) {
         this.text = text;
     }
-
 }

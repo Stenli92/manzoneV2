@@ -11,6 +11,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.Optional;
+
 @Service
 public class AuthServiceImpl implements AuthService {
 
@@ -30,11 +32,11 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public String register(UserServiceModel user) {
 
-        if (!this.authValidationService.validate(user)){
-
-            //do something
-            return "redirect: /register";
-        }
+//        if (!this.authValidationService.validate(user)){
+//
+//            //do something
+//            return "redirect: /register";
+//        }
 
 
         User regUser = this.mapper.map(user , User.class);
@@ -54,5 +56,19 @@ public class AuthServiceImpl implements AuthService {
             return "/auth/login";
         }
         return "/home/home";
+    }
+
+    @Override
+    public UserServiceModel getUser(String username) {
+
+        return this.mapper.map(this.userRepository.findByUsername(username) , UserServiceModel.class);
+    }
+
+
+    @Override
+    public boolean checkIfUserExists(String username) {
+
+        return this.userRepository.existsByUsername(username);
+
     }
 }

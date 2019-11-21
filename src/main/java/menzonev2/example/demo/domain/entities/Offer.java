@@ -62,4 +62,13 @@ public class Offer extends BaseEntity{
         this.price = price;
     }
 
+    @ManyToOne(targetEntity = User.class)
+    @JoinColumn(name = "user_id" , referencedColumnName = "id")
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 }

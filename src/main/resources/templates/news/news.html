@@ -20,7 +20,7 @@
                 <tr>
                     <div class="row mb-4 d-flex justify-content-around">
                         <div class="col-md-3 d-flex flex-column text-center mb-3">
-                            <a href="/videos/sport-videos">
+                            <a href="/news/sport-news">
                                 <img th:src="@{/img/sportnews.jpg}" width="300" height="300" />
                                 <h2 style="color: #fff">Sports</h2>
                             </a>
@@ -31,7 +31,7 @@
                 <tr class="row mx-auto">
                     <div class="row mb-4 d-flex justify-content-around">
                         <div class="col-md-3 d-flex flex-column text-center mb-3">
-                            <a href="/videos/music-videos">
+                            <a href="/news/music-news">
                                 <img th:src="@{/img/musicnews.jpg}" width="300" height="300" />
                                 <h2 style="color: #fff">Music</h2>
                             </a>
@@ -41,14 +41,24 @@
                 </tr>
         </table>
 
+            <div class="button-holder d-flex justify-content-center">
+                <a href="/news/create-news">
+                    <h2 style="color: #fff">Upload News</h2>
+                </a>
+            </div>
+
         <th:outputText value="&lt;/div&gt;" escape="false" rendered="#{status.index % 4 == 1}"/>
 
-        <div class="button-holder d-flex justify-content-center">
-            <a href="/videos/uploadvideo">
-                <h2 style="color: #fff">Upload Video</h2>
-            </a>
-        </div>
         </form>
+        <h2 class="text-center">Latest news</h2>
+        <table class="text-center">
+            <th:block th:each="news, iter : ${allNews}">
+                <tr>
+                    <td class="col-md-1 text-center" style="background-color: #5a6268" th:utext="${news.title}"></td>
+                </tr>
+
+            </th:block>
+        </table>
 
     </div>
 

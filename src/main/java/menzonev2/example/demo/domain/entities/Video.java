@@ -10,6 +10,7 @@ public class Video extends BaseEntity {
     private String title;
     private String url;
     private String type;
+    private User user;
 
 
     public Video() {
@@ -39,5 +40,15 @@ public class Video extends BaseEntity {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    @ManyToOne(targetEntity = User.class)
+    @JoinColumn(name = "user_id" , referencedColumnName = "id")
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

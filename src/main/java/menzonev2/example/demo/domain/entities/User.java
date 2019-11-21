@@ -21,6 +21,9 @@ public class User extends BaseEntity  {
     private String secretQuestion;
     private String secretAnswer;
     private Integer balance = (int)(Math.random() * ((MAX_AMOUNT - MIN_AMOUNT) + 1)) + MIN_AMOUNT;
+    private List<Video> videos ;
+    private List<Offer> offers ;
+    private List<Event> events ;
 
 
     public User() {
@@ -79,5 +82,32 @@ public class User extends BaseEntity  {
         this.balance = balance;
     }
 
+    @OneToMany(mappedBy = "user")
+    public List<Video> getVideos() {
+        return videos;
+    }
 
+    public void setVideos(List<Video> videos) {
+        this.videos = videos;
+    }
+
+    @Column(nullable = false)
+    @OneToMany(mappedBy = "user")
+    public List<Offer> getOffers() {
+        return offers;
+    }
+
+    public void setOffers(List<Offer> offers) {
+        this.offers = offers;
+    }
+
+    @Column(nullable = false)
+    @OneToMany(mappedBy = "user")
+    public List<Event> getEvents() {
+        return events;
+    }
+
+    public void setEvents(List<Event> events) {
+        this.events = events;
+    }
 }

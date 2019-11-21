@@ -25,3 +25,9 @@ body {
 .footer-background {
     color: #E41B23;
 }
+
+.newspaper {
+    -webkit-column-width: 400px; /* Chrome, Safari, Opera */
+    -moz-column-width: 400px; /* Firefox */
+    column-width: 400px;
+}

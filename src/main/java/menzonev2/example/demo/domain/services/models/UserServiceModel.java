@@ -1,7 +1,5 @@
 package menzonev2.example.demo.domain.services.models;
 
-import menzonev2.example.demo.domain.entities.CreditCard;
-
 public class UserServiceModel {
 
 //    private String id;

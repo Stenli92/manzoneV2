@@ -11,7 +11,7 @@
             <h4 class="text-white mt-2">Welcome to the arena, <p th:text="${session.user.getUsername()}"></p></h4>
         </div>
 
-        <form class="mx-auto w-15" th:action="@{/events/events}" th:method="post">
+        <form class="mx-auto w-15" th:action="@{/events/myevents}" th:method="post">
         <th:outputText value="&lt;div class=&quot;row mb-4 d-flex justify-content-around&quot;&gt;"
                       escape="false" rendered="#{status.index % 4 == 0}"/>
 
@@ -21,11 +21,7 @@
                 <tr class="row mx-auto">
                     <th class="col-md-1 text-center" th:utext="${iter.index + 1}"></th>
                     <td class="col-md-3">
-                        <div class="text-center">
 
-                            <img th:src="@{/img/football.png}" width="40" height="40"
-                                                      alt="quotes">
-                        </div>
 
                     <td>
                         <span th:if="${event.type == 'Concert'}">
@@ -49,9 +45,7 @@
                     <td class="col-md-2 text-center" th:text="${event.date}"></td>
                     <td class="col-md-2 text-center" th:text="${event.time}"></td>
                     <td class="col-md-2 text-center" th:text="${event.price}"></td>
-                    <td class="col-md-2 text-center" th:action="@{/events/buyTicket} ">
-                        <a class="btn btn-info mb-2" th:width="300">Buy Ticket</a>
-                    </td>
+
 
                 </tr>
 
@@ -60,11 +54,6 @@
 
         <th:outputText value="&lt;/div&gt;" escape="false" rendered="#{status.index % 4 == 1}"/>
 
-        <div class="button-holder d-flex justify-content-center">
-            <a href="/events/create-event">
-                <h2 style="color: #fff">Create Event</h2>
-            </a>
-        </div>
         </form>
 
     </div>
