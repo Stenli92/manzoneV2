@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
 @Controller
 @RequestMapping("/users")
@@ -43,10 +45,33 @@ public class AuthController {
         this.request = request;
     }
 
+    @ModelAttribute("createUsername")
+    public RegisterUserServiceModel registerModel(){
+
+        return new RegisterUserServiceModel();
+    }
+
     @GetMapping("/register")
-    public String register(){
+    public String register(@ModelAttribute("createUsername") RegisterUserServiceModel model){
 
         return "auth/register.html";
+    }
+
+    @PostMapping("/register")
+    public String register(@Valid @ModelAttribute RegisterUserServiceModel model , BindingResult result) {
+
+        if (result.hasErrors()){
+
+
+            return "/auth/register";
+        }
+
+
+        UserServiceModel serviceModel = mapper.map(model, UserServiceModel.class);
+
+        this.authService.register(serviceModel);
+
+        return "redirect:/users/login";
     }
 
     @GetMapping("/login")
@@ -146,21 +171,7 @@ public class AuthController {
         return "auth/forgottenPassQuest.html";
     }
 
-    @PostMapping("/register")
-    public String register(@ModelAttribute RegisterUserServiceModel model) {
 
-
-        UserServiceModel serviceModel = mapper.map(model, UserServiceModel.class);
-
-//        if (!authValidationService.validate(serviceModel)) {
-//            mav.addObject("emailError", "Email is not valid");
-//            mav.setViewName("/auth/register");
-//        }
-
-        this.authService.register(serviceModel);
-
-        return "redirect:/users/login";
-    }
 
     @PostMapping("/login")
     public String login(@ModelAttribute LoginUserServiceModel model , HttpSession session) {
