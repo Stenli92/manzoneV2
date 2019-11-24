@@ -160,15 +160,11 @@ public class AuthController {
 
 
 
-        User userToUpdatePass = this.userRepository.getOne(1);
+        user.setPassword(DigestUtils.sha256Hex(model.getNewPass()));
 
-        System.out.println();
+        this.userRepository.save(user);
 
-        userToUpdatePass.setPassword(model.getNewPass());
-
-        this.userRepository.save(this.mapper.map(userToUpdatePass , User.class));
-
-        return "auth/forgottenPassQuest.html";
+        return "redirect:/users/home";
     }
 
 
@@ -180,9 +176,17 @@ public class AuthController {
         LoginUserServiceModel serviceModel = mapper.map(model, LoginUserServiceModel.class);
 
         User user = this.userRepository.findByUsername(model.getUsername());
-        authService.login(serviceModel);
-        session.setAttribute("user" ,user);
-        return "redirect:/users/home";
+
+        if (authValidationService.loginValidation(this.mapper.map(model , UserServiceModel.class))){
+
+//            authService.login(serviceModel);
+            session.setAttribute("user" ,user);
+            return "redirect:/users/home";
+        }
+
+        return "redirect:/users/login";
+
+
     }
 
     @GetMapping("/home")

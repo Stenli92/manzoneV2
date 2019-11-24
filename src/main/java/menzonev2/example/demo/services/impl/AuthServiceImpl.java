@@ -7,6 +7,7 @@ import menzonev2.example.demo.repositories.UserRepository;
 import menzonev2.example.demo.services.AuthService;
 import menzonev2.example.demo.services.AuthValidationService;
 import menzonev2.example.demo.services.HashingService;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.ModelAndView;
@@ -54,6 +55,14 @@ public class AuthServiceImpl implements AuthService {
         if (userToLog == null){
 
             return "/auth/login";
+        }
+
+        String insertedPass = DigestUtils.sha256Hex(user.getUsername());
+
+        if(!insertedPass.equals(userToLog.getPassword())){
+            return "/auth/login";
+
+
         }
         return "/home/home";
     }
