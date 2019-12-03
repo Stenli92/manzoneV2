@@ -2,18 +2,30 @@ package menzonev2.example.demo.domain.entities;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Table
 public class News extends BaseEntity {
 
 
+    private LocalDateTime date = LocalDateTime.now();
     private String title;
     private String topic;
     private String text;
     private User user;
 
     public News() {
+    }
+
+    @Column
+    public LocalDateTime getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDateTime date) {
+        this.date = date;
     }
 
     @Column(nullable = false)

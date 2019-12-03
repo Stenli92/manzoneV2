@@ -1,5 +1,8 @@
 package menzonev2.example.demo.web.models;
 
+import org.hibernate.validator.constraints.UniqueElements;
+
+import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
@@ -16,6 +19,7 @@ public class RegisterUserServiceModel {
     @NotEmpty(message = "Password field cannot be empty")
     @Size(min = 3 , max = 15 , message = "Password field should have between 3 and 15 digits")
     private String password;
+    @Size(min = 3 , max = 15 , message = "Password field should have between 3 and 15 digits")
     private String confirmPassword;
     @NotEmpty(message = "Email field cannot be empty")
     @Pattern(regexp= EMAIL_PATTERN , message = "The email you inserted is not valid")

@@ -19,13 +19,15 @@
             <table class="text-center">
                 <th:block th:each="news, iter : ${sportNews}">
                     <tr>
-                        <td class="col-md-1 text-center" style="background-color: #5a6268" th:utext="${news.title}"></td>
+                        <td class="col-md-1 text-center"  style="background-color: #5a6268">
+                            <a  th:utext="${news.date}"  th:width="300"></a>
+                            <a  th:utext="${news.title}" th:width="300" th:href="@{/news/news/{id}(id=${news.id})}"></a>
+
+                        </td>
                     </tr>
 
                 </th:block>
             </table>
-
-
 
 
             <th:outputText value="&lt;/div&gt;" escape="false" rendered="#{status.index % 4 == 1}"/>

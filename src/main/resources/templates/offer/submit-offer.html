@@ -13,7 +13,7 @@
         <th:outputText value="&lt;div class=&quot;row mb-4 d-flex justify-content-around&quot;&gt;"
                       escape="false" rendered="#{status.index % 2 == 0}"/>
 
-        <form class="mx-auto w-15" th:action="@{/store/create-offer}" th:method="post">
+        <form class="mx-auto w-15" th:action="@{/store/create-offer}" th:method="post" th:object="${offerModel}">
         <div class="row justify-content-md-center">
             <div class="col col-6">
                 <div class="form-group">
@@ -21,6 +21,9 @@
                         <label for="name" class="h3 mb-2">Name</label>
                     </div>
                     <input type="text" class="form-control" id="name" name="name"/>
+                    <ul th:if="${#fields.errors('name')}">
+                        <li class="text-danger" th:each="error : ${#fields.errors('name')} " th:text="${error}"></li>
+                    </ul>
                 </div>
             </div>
         </div>
@@ -37,6 +40,9 @@
                             <option>Shoe</option>
                             <option>Accessory</option>
                         </ul>
+                        <ul th:if="${#fields.errors('type')}">
+                            <li class="text-danger" th:each="error : ${#fields.errors('type')} " th:text="${error}"></li>
+                        </ul>
                     </select>
                 </div>
             </div>
@@ -49,6 +55,9 @@
                         <label for="size" class="h3 mb-2">Size</label>
                     </div>
                     <input type="text" class="form-control" id="size" name="size"/>
+                    <ul th:if="${#fields.errors('size')}">
+                        <li class="text-danger" th:each="error : ${#fields.errors('size')} " th:text="${error}"></li>
+                    </ul>
                 </div>
             </div>
         </div>
@@ -60,6 +69,9 @@
                         <label for="color" class="h3 mb-2">Color</label>
                     </div>
                     <input type="text" class="form-control" id="color" name="color"/>
+                    <ul th:if="${#fields.errors('color')}">
+                        <li class="text-danger" th:each="error : ${#fields.errors('color')} " th:text="${error}"></li>
+                    </ul>
                 </div>
             </div>
         </div>
@@ -71,6 +83,9 @@
                             <label for="price" class="h3 mb-2">Price</label>
                         </div>
                         <input type="text" class="form-control" id="price" name="price"/>
+                        <ul th:if="${#fields.errors('price')}">
+                            <li class="text-danger" th:each="error : ${#fields.errors('price')} " th:text="${error}"></li>
+                        </ul>
                     </div>
                 </div>
             </div>

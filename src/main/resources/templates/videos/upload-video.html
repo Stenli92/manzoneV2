@@ -6,7 +6,7 @@
     <th:block th:include="~{fragments/user-navbar}"/>
     <h1 class="text-center">Upload Video</h1>
     <hr class="hr-3"/>
-    <form class="mx-auto w-15" th:action="@{/videos/uploadvideo}" method="post">
+    <form class="mx-auto w-15" th:action="@{/videos/uploadvideo}" method="post" th:object="${videoModel}">
 
         <div class="row justify-content-md-center">
             <div class="col col-6">
@@ -15,6 +15,9 @@
                         <label for="title" class="h3 mb-2">Title</label>
                     </div>
                     <input type="text" class="form-control" id="title" name="title"/>
+                    <ul th:if="${#fields.errors('title')}">
+                        <li class="text-danger" th:each="error : ${#fields.errors('title')} " th:text="${error}"></li>
+                    </ul>
                 </div>
             </div>
         </div>
@@ -30,6 +33,9 @@
                             <option>Music</option>
                         </ul>
                     </select>
+                    <ul th:if="${#fields.errors('type')}">
+                        <li class="text-danger" th:each="error : ${#fields.errors('type')} " th:text="${error}"></li>
+                    </ul>
                 </div>
             </div>
         </div>
@@ -40,6 +46,9 @@
                         <label for="url" class="h3 mb-2">Link</label>
                     </div>
                     <input type="text" class="form-control" id="url" name="url"/>
+                    <ul th:if="${#fields.errors('url')}">
+                        <li class="text-danger" th:each="error : ${#fields.errors('url')} " th:text="${error}"></li>
+                    </ul>
                 </div>
             </div>
         </div>

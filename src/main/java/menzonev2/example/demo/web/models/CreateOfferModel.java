@@ -1,14 +1,28 @@
 package menzonev2.example.demo.web.models;
 
-import java.math.BigDecimal;
+import javax.validation.constraints.*;
 
 public class CreateOfferModel {
 
+    @NotEmpty(message = "Field cannot be empty")
+    @Size(min = 3 , max = 15 , message = "Name should have between 3 and 15 digits")
     private String name;
+
+    @NotEmpty(message = "Field cannot be empty")
     private String type;
+
+    @NotEmpty(message = "Field cannot be empty")
+    @Pattern(regexp = "^[a-zA-Z0-9]+$" , message = "Size field can contain only letters or numbers")
     private String size;
+
+    @NotEmpty(message = "Field cannot be empty")
+    @Size(min = 3 , message = "Color should have between 3 and 15 digits")
+    @Pattern(regexp = "^[a-z][a-z\\s]*$" , message = "Field should contain only letters")
     private String color;
-    private BigDecimal price;
+
+    @Min(value = 1 , message = "Price cannot be zero or a negative number")
+    @NotNull(message = "Field cannot be empty")
+    private Integer price;
 
     public CreateOfferModel() {
     }
@@ -45,11 +59,11 @@ public class CreateOfferModel {
         this.color = color;
     }
 
-    public BigDecimal getPrice() {
+    public Integer getPrice() {
         return price;
     }
 
-    public void setPrice(BigDecimal price) {
+    public void setPrice(Integer price) {
         this.price = price;
     }
 }

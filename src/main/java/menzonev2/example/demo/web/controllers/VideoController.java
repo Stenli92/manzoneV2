@@ -5,10 +5,12 @@ import menzonev2.example.demo.domain.entities.Video;
 import menzonev2.example.demo.repositories.VideoRepository;
 import menzonev2.example.demo.services.VideoService;
 import menzonev2.example.demo.web.models.CreateVideoModel;
+import menzonev2.example.demo.web.models.RegisterUserServiceModel;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 import java.util.List;
 
 @Controller
@@ -33,6 +36,12 @@ public class VideoController {
         this.videoService = videoService;
         this.videoRepository = videoRepository;
         this.request = request;
+    }
+
+    @ModelAttribute("videoModel")
+    public CreateVideoModel registerModel(){
+
+        return new CreateVideoModel();
     }
 
     @GetMapping("/videos")
@@ -70,7 +79,12 @@ public class VideoController {
     }
 
     @PostMapping("/uploadvideo")
-    public String uploadVideoConfirm(@ModelAttribute CreateVideoModel model){
+    public String uploadVideoConfirm(@Valid @ModelAttribute("videoModel") CreateVideoModel model , BindingResult result){
+
+        if(result.hasErrors()){
+
+            return "/videos/upload-video.html";
+        }
 
 
         this.videoService.upload(model);

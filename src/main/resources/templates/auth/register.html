@@ -8,7 +8,7 @@
 <main>
     <h1 class="text-center">Register</h1>
     <hr class="hr-3"/>
-    <form class="mx-auto w-15" th:action="@{/users/register}" th:method="post" th:object="${createUsername}">
+    <form class="mx-auto w-15" th:action="@{/users/register}" th:method="post" th:object="${registerModel}">
         <div class="row justify-content-md-center">
             <div class="col col-6">
                 <div class="form-group">
@@ -17,7 +17,7 @@
                     </div>
                     <input type="text" th:field="*{username}"  class="form-control" id="username" name="username"/>
                     <ul th:if="${#fields.errors('username')}">
-                        <li th:each="error : ${#fields.errors('username')} " th:text="${error}"></li>
+                        <li class="text-danger" th:each="error : ${#fields.errors('username')} " th:text="${error}"></li>
                     </ul>
                 </div>
             </div>
@@ -30,7 +30,7 @@
                     </div>
                     <input type="text" class="form-control" id="email" name="email"/>
                     <ul th:if="${#fields.errors('email')}">
-                        <li th:each="error : ${#fields.errors('email')} " th:text="${error}"></li>
+                        <li class="text-danger" th:each="error : ${#fields.errors('email')} " th:text="${error}"></li>
                     </ul>
                 </div>
             </div>
@@ -44,7 +44,7 @@
                     </div>
                     <input type="password" class="form-control" id="password" name="password"/>
                     <ul th:if="${#fields.errors('password')}">
-                        <li th:each="error : ${#fields.errors('password')} " th:text="${error}"></li>
+                        <li class="text-danger" th:each="error : ${#fields.errors('password')} " th:text="${error}"></li>
                     </ul>
                 </div>
             </div>
@@ -57,7 +57,7 @@
                     </div>
                     <input type="password" class="form-control" id="confirmPassword" name="confirmPassword"/>
                     <ul th:if="${#fields.errors('confirmPassword')}">
-                        <li th:each="error : ${#fields.errors('confirmPassword')} " th:text="${error}"></li>
+                        <li class="text-danger" th:each="error : ${#fields.errors('confirmPassword')} " th:text="${error}"></li>
                     </ul>
                 </div>
             </div>
@@ -70,7 +70,7 @@
                     </div>
                     <input type="text" class="form-control" id="secretQuestion" name="secretQuestion"/>
                     <ul th:if="${#fields.errors('secretQuestion')}">
-                        <li th:each="error : ${#fields.errors('secretQuestion')} " th:text="${error}"></li>
+                        <li class="text-danger" th:each="error : ${#fields.errors('secretQuestion')} " th:text="${error}"></li>
                     </ul>
                 </div>
             </div>
@@ -83,7 +83,7 @@
                     </div>
                     <input type="text" class="form-control" id="secretAnswer" name="secretAnswer"/>
                     <ul th:if="${#fields.errors('secretAnswer')}">
-                        <li th:each="error : ${#fields.errors('secretAnswer')} " th:text="${error}"></li>
+                        <li class="text-danger" th:each="error : ${#fields.errors('secretAnswer')} " th:text="${error}"></li>
                     </ul>
                 </div>
             </div>

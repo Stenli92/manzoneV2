@@ -6,12 +6,12 @@ import menzonev2.example.demo.web.models.CreateNewsModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/news")
@@ -45,7 +45,16 @@ public class NewsController {
 
         List<NewsServiceModel> allNews = this.newsService.getAll();
 
-        model.addAttribute("allNews" , allNews);
+        List <NewsServiceModel> sorted = allNews.stream().sorted((a , b) ->{
+
+            LocalDateTime first = a.getDate();
+            LocalDateTime second= b.getDate();
+
+           return second.compareTo(first);
+
+        }).collect(Collectors.toList());
+
+        model.addAttribute("allNews" , sorted);
 
         return "/news/news.html";
     }
@@ -55,7 +64,16 @@ public class NewsController {
 
         List<NewsServiceModel> sportNews = this.newsService.getNewsByTopic("Sport");
 
-        model.addAttribute("sportNews" , sportNews);
+        List <NewsServiceModel> sorted = sportNews.stream().sorted((a , b) ->{
+
+            LocalDateTime first = a.getDate();
+            LocalDateTime second= b.getDate();
+
+            return second.compareTo(first);
+
+        }).collect(Collectors.toList());
+
+        model.addAttribute("sportNews" , sorted);
 
         return "/news/sport-news.html";
     }
@@ -65,8 +83,35 @@ public class NewsController {
 
         List<NewsServiceModel> musicNews = this.newsService.getNewsByTopic("Music");
 
-        model.addAttribute("musicNews" , musicNews);
+        List <NewsServiceModel> sorted = musicNews.stream().sorted((a , b) ->{
+
+            LocalDateTime first = a.getDate();
+            LocalDateTime second= b.getDate();
+
+            return second.compareTo(first);
+
+        }).collect(Collectors.toList());
+        model.addAttribute("musicNews" , sorted);
 
         return "/news/music-news.html";
     }
+
+
+    @GetMapping("/news/{id}")
+    public String newsTopic(@PathVariable("id") Long id , Model model){
+
+        NewsServiceModel news = this.newsService.getNewsById(id);
+
+
+
+
+        model.addAttribute("news" , news.getText());
+        model.addAttribute("date" , news.getDate());
+        model.addAttribute("newsTitle" , news.getTitle());
+
+
+
+        return "/news/current-news.html";
+    }
+
 }

@@ -11,5 +11,7 @@ public interface NewsService {
 
     void createNews(CreateNewsModel model);
 
+    NewsServiceModel getNewsById(Long id);
+
     List<NewsServiceModel> getAll();
 }

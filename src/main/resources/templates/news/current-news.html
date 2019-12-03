@@ -8,36 +8,30 @@
 
     <div class="container">
         <div class="text-center mb-3">
-            <h4 class="text-white mt-2">Welcome to the arena, <p th:text="${session.user.getUsername()}"></p></h4>
+            <h4 class="text-white mt-2"><p th:text="${newsTitle}"></p></h4>
         </div>
 
         <form class="mx-auto w-15" th:action="@{news.html}" th:method="post">
         <th:outputText value="&lt;div class=&quot;row mb-4 d-flex justify-content-around&quot;&gt;"
                       escape="false" rendered="#{status.index % 4 == 0}"/>
 
-            <h2 class="text-center">Latest news from the world of music</h2>
 
 
-            <th:block th:each="news, iter : ${musicNews}">
-                <tr>
-                    <td class="col-md-1 text-center"  style="background-color: #5a6268">
-                        <a  th:utext="${news.date}"  th:width="300"></a>
-                        <a  th:utext="${news.title}" th:width="300" th:href="@{/news/news/{id}(id=${news.id})}"></a>
-
-                    </td>
-                </tr>
-
-            </th:block>
+            <div class="button-holder d-flex justify-content-center">
+                <a>
+                    <h3 style="color: #fff" th:text="${news}"></h3>
+                </a>
+            </div>
 
         <th:outputText value="&lt;/div&gt;" escape="false" rendered="#{status.index % 4 == 1}"/>
 
         </form>
 
+
     </div>
 
 
+    <th:block th:include="~{fragments/footer}"/>
 </main>
 </body>
-<th:block th:include="~{fragments/footer}"/>
-
 </html>

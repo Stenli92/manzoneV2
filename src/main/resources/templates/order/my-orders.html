@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<th:block th:include="~{fragments/head}"/>
+<body>
+<main>
+    <th:block th:include="~{fragments/user-navbar}"/>
+
+    <div class="container">
+        <div class="text-center mb-3">
+            <h4 class="text-white mt-2">Welcome to the arena, <p th:text="${session.user.getUsername()}"></p></h4>
+        </div>
+
+        <form class="mx-auto w-15" th:action="@{/my-orders.html}" th:method="post">
+            <th:outputText value="&lt;div class=&quot;row mb-4 d-flex justify-content-around&quot;&gt;"
+                           escape="false" rendered="#{status.index % 4 == 0}"/>
+
+            <table>
+                <th:block th:each="event , iter : ${session.user.getOrders()} ">
+
+                    <tr class="row mx-auto">
+                        <th class="col-md-1 text-center" th:utext="${iter.index + 1}"></th>
+                        <td class="col-md-3">
+                            <div class="text-center">
+
+                                <img th:src="@{/img/football.png}" width="40" height="40"
+                                     alt="quotes">
+                            </div>
+
+                        <td>
+                        <span th:if="${event.type == 'Concert'}">
+                            <div class="text-center">
+
+                            <img th:src="@{/img/concert.png}" width="40" height="40"
+                                 alt="quotes">
+                        </div>
+                        </span>
+                            <span th:unless="${event.type == 'Concert'}">
+                            <div class="text-center">
+
+                            <img th:src="@{/img/football.png}" width="40" height="40"
+                                 alt="quotes">
+                        </div>
+                        </span>
+                        </td>
+                        </td>
+                        <td class="col-md-3 text-center" th:text="${event.name}"></td>
+                        <td class="col-md-2 text-center" th:text="${event.location}"></td>
+                        <td class="col-md-2 text-center" th:text="${event.date}"></td>
+                        <td class="col-md-2 text-center" th:text="${event.time}"></td>
+                        <td class="col-md-2 text-center" th:text="${event.price}"></td>
+
+
+                    </tr>
+
+                </th:block>
+            </table>
+
+            <th:outputText value="&lt;/div&gt;" escape="false" rendered="#{status.index % 4 == 1}"/>
+
+            <div class="button-holder d-flex justify-content-center">
+                <a href="/events/create-event">
+                    <h2 style="color: #fff">Create Event</h2>
+                </a>
+            </div>
+        </form>
+
+    </div>
+
+
+    <th:block th:include="~{fragments/footer}"/>
+</main>
+</body>
+</html>

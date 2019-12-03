@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:th="http://www.thymeleaf.org">
+<th:block th:include="~{fragments/head}"/>
+<body>
+<main>
+    <th:block th:include="~{fragments/user-navbar}"/>
+
+    <div class="container">
+        <div class="text-center mb-3">
+            <h4 class="text-white mt-2">Welcome to the arena, <p th:text="${session.user.getUsername()}"></p></h4>
+        </div>
+        <th:outputText value="&lt;div class=&quot;row mb-4 d-flex justify-content-around&quot;&gt;"
+                      escape="false" rendered="#{status.index % 2 == 0}"/>
+        <div class="container">
+            <div class="text-center mb-3">
+                <h4 class="text-white mt-2" th:text="${message}"></h4>
+            </div>
+
+
+            <div class="row mb-4 d-flex justify-content-around">
+                <div class="col-md-3 d-flex flex-column text-center mb-3">
+
+                    <img th:src="@{/img/empty-cart.png}" width="300" height="300"/>
+
+                    <a href="/store/offer-index">
+
+                        <h2 style="color: #fff">Check our store</h2>
+                    </a>
+                    <h2 style="color: #fff">OR</h2>
+                    <a href="/events/events">
+
+                        <h2 style="color: #fff">Events</h2>
+                    </a>
+                </div>
+
+            </div>
+
+
+        </div>
+
+        <th:outputText value="&lt;/div&gt;" escape="false" rendered="#{status.index % 2 == 1}"/>
+
+
+
+    </div>
+
+
+    <th:block th:include="~{fragments/footer}"/>
+</main>
+</body>
+</html>

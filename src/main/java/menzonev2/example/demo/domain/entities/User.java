@@ -1,5 +1,7 @@
 package menzonev2.example.demo.domain.entities;
 
+import menzonev2.example.demo.web.models.CartModel;
+
 import javax.persistence.*;
 import javax.validation.constraints.Pattern;
 import java.util.List;
@@ -16,6 +18,7 @@ public class User extends BaseEntity  {
     private final static Integer MAX_AMOUNT = 1000;
 
     private String username;
+    private String role;
     private String password;
     private String email;
     private String secretQuestion;
@@ -30,6 +33,7 @@ public class User extends BaseEntity  {
     }
 
     @Column(nullable = false , unique = true)
+
     public String getUsername() {
         return username;
     }
@@ -38,6 +42,16 @@ public class User extends BaseEntity  {
     public void setUsername(String username) {
         this.username = username;
     }
+
+    @Column(nullable = false)
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
     @Column(nullable = false)
     public String getPassword() {
         return password;
@@ -110,4 +124,5 @@ public class User extends BaseEntity  {
     public void setEvents(List<Event> events) {
         this.events = events;
     }
+
 }

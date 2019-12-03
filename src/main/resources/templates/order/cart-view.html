@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:th="http://www.thymeleaf.org">
+<th:block th:include="~{fragments/head}"/>
+<body>
+<main>
+    <th:block th:include="~{fragments/user-navbar}"/>
+
+    <div class="container">
+        <div class="text-center mb-3">
+            <h4 class="text-white mt-2">Cart Page
+                <p th:text="${session.user.getUsername()}"></p></h4>
+        </div>
+
+        <form class="mx-auto w-15" th:action="@{cart-view.html}" th:method="post">
+        <th:outputText value="&lt;div class=&quot;row mb-4 d-flex justify-content-around&quot;&gt;"
+                      escape="false" rendered="#{status.index % 4 == 0}"/>
+
+            <h3>Cart Page</h3>
+            <table cellpadding="2" cellspacing="2" border="1">
+                <tr>
+                    <th>Option </th>
+                    <th>Id </th>
+                    <th>Name </th>
+<!--                    <th>Photo </th>-->
+                    <th>Price </th>
+                    <th>Quantity </th>
+                    <th>Sub Total </th>
+                </tr>
+                <th:set var="total" value="0"></th:set>
+                <th:block th:each="product , iter : ${session.cart} ">
+                    <th:set var="total"
+                           value="${total + product.price * product.quantity }"></th:set>
+                    <tr>
+                        <td align="center"><a
+                                th:href="@{/cart/remove/{id}(id=${product.id})}"
+                                onclick="return confirm('Are you sure?')">Remove</a></td>
+                        <td class="col-md-3 text-center" th:text="${product.id}"></td>
+                        <td class="col-md-3 text-center" th:text="${product.name}"></td>
+                        <td class="col-md-3 text-center" th:text="${product.price}"></td>
+                        <td class="col-md-3 text-center" th:text="${product.quantity}">
+
+                        </td>
+                        <td class="col-md-3 text-center" th:text="${product.price * product.quantity}">
+<!--                            <div th:with="result=${product.price * event.quantity}">-->
+<!--                                <span th:text="${result}"></span>-->
+<!--                            </div>-->
+<!--                        </td>-->
+
+                        <td><img src="${pageContext.request.contextPath }/resources/http://learningprogramming.net/wp-content/uploads/java/spring_mvc/${item.product.photo }"
+                                 width="50"></td>
+                    </tr>
+                </th:block>
+                <tr>
+                    <td colspan="6" align="right"  >Sum</td>
+                    <td><b th:text="${#aggregates.sum(session.cart.![price])}" /></td>
+                </tr>
+
+
+            </table>
+            <br>
+            <a href="/users/home">Continue
+                Shopping</a>
+
+            <td class="col-md-2 text-center" th:action="@{/events/buyTicket} ">
+                <a class="btn btn-info mb-2" th:width="300" th:href="@{/cart/buy}">Buy</a>
+            </td>
+
+        </form>
+
+    </div>
+
+
+    <th:block th:include="~{fragments/footer}"/>
+</main>
+</body>
+</html>

@@ -56,4 +56,9 @@ public class EventServiceImpl implements EventService {
 
         return models.stream().map(m -> this.mapper.map(m , CreateEventModel.class)).collect(Collectors.toList());
     }
+
+    @Override
+    public CreateEventModel getByID(Long id) {
+        return this.mapper.map(this.eventRepository.getById(id) , CreateEventModel.class);
+    }
 }

@@ -31,7 +31,7 @@
                     <td class="col-md-2 text-center" th:text="${tshirt.color}"></td>
                     <td class="col-md-2 text-center" th:text="${tshirt.price}"></td>
                     <td class="col-md-2 text-center" th:action="@{/events/buyTicket} ">
-                        <a class="btn btn-info mb-2" th:width="300">Add to Card</a>
+                        <a class="btn btn-info mb-2" th:width="300" th:href="@{/cart/buy-offer/{id}(id=${tshirt.id})}">Add to Cart</a>
                     </td>
 
                 </tr>

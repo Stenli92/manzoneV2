@@ -10,4 +10,6 @@ public interface EventService {
     void createEvent(CreateEventModel model);
 
     List<CreateEventModel> getAllUserEvents(User user);
+
+    CreateEventModel getByID(Long id);
 }

@@ -50,4 +50,9 @@ public class OfferServiceImpl implements OfferService {
 
         return offers.stream().map(o -> this.mapper.map( o , CreateOfferModel.class)).collect(Collectors.toList());
     }
+
+    @Override
+    public CreateOfferModel getById(Long id) {
+        return this.mapper.map(this.offerRepository.findById(id) , CreateOfferModel.class);
+    }
 }

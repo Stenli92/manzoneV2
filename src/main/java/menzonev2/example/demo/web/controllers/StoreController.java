@@ -8,6 +8,7 @@ import menzonev2.example.demo.web.models.CreateOfferModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 import java.util.List;
 
 @Controller
@@ -32,6 +34,12 @@ public class StoreController {
         this.request = request;
     }
 
+    @ModelAttribute("offerModel")
+    public CreateOfferModel registerModel(){
+
+        return new CreateOfferModel();
+    }
+
     @GetMapping("/offer-index")
     public String offerindex(){
 
@@ -45,9 +53,13 @@ public class StoreController {
     }
 
     @PostMapping("/create-offer")
-    public String createOfferConfirm(@ModelAttribute CreateOfferModel model){
+    public String createOfferConfirm(@Valid @ModelAttribute("offerModel") CreateOfferModel model , BindingResult result){
 
-        System.out.println();
+        if (result.hasErrors()){
+
+            return "/offer/submit-offer.html";
+
+        }
 
         this.offerService.createOffer(model);
 
@@ -97,5 +109,11 @@ public class StoreController {
         model.addAttribute("offers" , offers);
 
         return "/offer/my-offers.html";
+    }
+
+    @GetMapping("/my-orders")
+    public String myOrders(){
+
+        return "/order/my-orders.html";
     }
 }

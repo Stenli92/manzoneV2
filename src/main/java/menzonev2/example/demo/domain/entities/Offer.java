@@ -5,13 +5,15 @@ import java.math.BigDecimal;
 
 @Entity
 @Table
-public class Offer extends BaseEntity{
+public class Offer extends BaseEntity {
+
 
     private String name;
     private String type;
+    private BigDecimal price;
     private String size;
     private String color;
-    private BigDecimal price;
+    private Integer quantity = 1;
     private User user;
 
     public Offer() {
@@ -26,13 +28,22 @@ public class Offer extends BaseEntity{
         this.name = name;
     }
 
-    @Column(name = "offer_type" , nullable = false)
+    @Column(nullable = false)
     public String getType() {
         return type;
     }
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    @Column(nullable = false)
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
     }
 
     @Column(nullable = false)
@@ -53,14 +64,6 @@ public class Offer extends BaseEntity{
         this.color = color;
     }
 
-    @Column(name = "price" , nullable = false)
-    public BigDecimal getPrice() {
-        return price;
-    }
-
-    public void setPrice(BigDecimal price) {
-        this.price = price;
-    }
 
     @ManyToOne(targetEntity = User.class)
     @JoinColumn(name = "user_id" , referencedColumnName = "id")
@@ -70,5 +73,13 @@ public class Offer extends BaseEntity{
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public Integer getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
     }
 }

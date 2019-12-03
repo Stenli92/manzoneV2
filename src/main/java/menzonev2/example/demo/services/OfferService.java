@@ -10,4 +10,6 @@ public interface OfferService {
    void createOffer(CreateOfferModel model);
 
    List<CreateOfferModel> getAllOffersByUser(User user);
+
+   CreateOfferModel getById(Long id);
 }

@@ -1,14 +1,31 @@
 package menzonev2.example.demo.web.models;
 
-import menzonev2.example.demo.domain.entities.EventType;
+
+import javax.validation.constraints.*;
 
 public class CreateEventModel {
 
+    @NotEmpty(message = "Field cannot be empty")
+    @Size(min = 3 , max = 15 , message = "Name should have between 3 and 15 digits")
     private String name;
-    private EventType type;
+
+    @NotEmpty(message = "Field cannot be empty")
+    private String type;
+
+    @NotEmpty(message = "Field cannot be empty")
+    @Size(min = 2 , max = 20 , message = "Location name should have between 2 and 20 symbols")
+    @Pattern(regexp = "^[a-zA-Z\\s]*$" , message = "Field should contain only letters")
     private String location;
+
+    @NotEmpty(message = "Please select event date")
     private String date;
+
+    @NotEmpty(message = "Please select event time")
     private String time;
+
+
+    @Min(value = 1 , message = "Price cannot be zero or a negative number")
+    @NotNull(message = "Field cannot be empty")
     private Integer price;
 
     public CreateEventModel() {
@@ -22,11 +39,11 @@ public class CreateEventModel {
         this.name = name;
     }
 
-    public EventType getType() {
+    public String getType() {
         return type;
     }
 
-    public void setType(EventType type) {
+    public void setType(String type) {
         this.type = type;
     }
 

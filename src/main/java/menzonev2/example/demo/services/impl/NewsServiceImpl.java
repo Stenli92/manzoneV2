@@ -13,13 +13,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class NewsServiceModelImpl implements NewsService {
+public class NewsServiceImpl implements NewsService {
 
     private final NewsRepository newsRepository;
     private final ModelMapper maper;
 
     @Autowired
-    public NewsServiceModelImpl(NewsRepository newsRepository, ModelMapper maper) {
+    public NewsServiceImpl(NewsRepository newsRepository, ModelMapper maper) {
         this.newsRepository = newsRepository;
         this.maper = maper;
     }
@@ -38,6 +38,8 @@ public class NewsServiceModelImpl implements NewsService {
         this.newsRepository.save(this.maper.map(model , News.class));
     }
 
+
+
     @Override
     public List<NewsServiceModel> getAll() {
 
@@ -45,5 +47,10 @@ public class NewsServiceModelImpl implements NewsService {
 
         return news.stream().map(n -> this.maper.map(n , NewsServiceModel.class)).collect(Collectors.toList());
 
+    }
+
+    @Override
+    public NewsServiceModel getNewsById(Long id) {
+        return this.maper.map(this.newsRepository.findById(id) , NewsServiceModel.class);
     }
 }

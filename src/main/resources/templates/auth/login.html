@@ -18,7 +18,12 @@
                         <input type="text" class="form-control" id="username" name="username"/>
                     </div>
                 </div>
+
 <!--            </div>-->
+
+            <div class="row justify-content-md-center">
+                <p class="text-danger" th:text="${error}"></p>
+            </div>
 
 
             <div class="row justify-content-md-center">
@@ -32,7 +37,7 @@
 <!--                </div>-->
             </div>
             <div class="row  justify-content-md-center">
-            <a title="Profile" href="/users/forgottenPass"> Forgotten password </a>
+            <a title="Profile" href="/passwords/forgottenPass"> Forgotten password </a>
                 </div>
 
             <div class="row  justify-content-md-center">

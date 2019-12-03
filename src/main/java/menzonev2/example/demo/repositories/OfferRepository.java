@@ -15,4 +15,6 @@ public interface OfferRepository extends JpaRepository<Offer , Integer> {
     List<Offer> findAllByType(String type);
 
     List<Offer> findAllByUser(User user);
+
+    Offer findById(Long id);
 }

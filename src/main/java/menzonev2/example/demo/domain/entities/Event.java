@@ -5,20 +5,22 @@ import java.math.BigDecimal;
 
 @Entity
 @Table
-public class Event extends BaseEntity{
+public class Event extends BaseEntity {
 
     private String name;
     private String type;
+    private BigDecimal price;
     private String location;
     private String date;
+    private Integer quantity = 1;
     private String time;
-    private BigDecimal price;
     private User user;
 
     public Event() {
     }
 
-    @Column(name = "event_name" , nullable = false , unique = true)
+
+    @Column(nullable = false)
     public String getName() {
         return name;
     }
@@ -27,7 +29,7 @@ public class Event extends BaseEntity{
         this.name = name;
     }
 
-    @Column(name = "event_type" , nullable = false)
+    @Column(nullable = false)
     public String getType() {
         return type;
     }
@@ -35,7 +37,25 @@ public class Event extends BaseEntity{
     public void setType(String type) {
         this.type = type;
     }
-    @Column(name = "location" , nullable = false)
+
+    @Column(nullable = false)
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public Integer getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
+    }
+
+    @Column(nullable = false)
     public String getLocation() {
         return location;
     }
@@ -60,14 +80,7 @@ public class Event extends BaseEntity{
     public void setTime(String time) {
         this.time = time;
     }
-    @Column(name = "price" , nullable = false)
-    public BigDecimal getPrice() {
-        return price;
-    }
 
-    public void setPrice(BigDecimal price) {
-        this.price = price;
-    }
 
     @ManyToOne(targetEntity = User.class)
     @JoinColumn(name = "user_id" , referencedColumnName = "id")
