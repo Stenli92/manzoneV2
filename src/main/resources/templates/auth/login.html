@@ -7,7 +7,7 @@
 <main>
     <h1 class="text-center">Login</h1>
     <hr class="hr-3"/>
-    <form class="mx-auto w-15" action="/users/login" method="post">
+    <form class="mx-auto w-15" th:action="@{/users/login}" th:method="post">
         <div class="container">
             <div class="row justify-content-md-center">
 <!--                <div class="col col-6">-->
@@ -51,6 +51,8 @@
         </div>
     </form>
 </main>
-<th:block th:include="~{fragments/footer}" />
+<footer>
+    <th:block th:include="~{fragments/footer}" />
+</footer>
 </body>
 </html>

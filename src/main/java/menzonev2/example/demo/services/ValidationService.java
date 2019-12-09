@@ -4,7 +4,6 @@ import menzonev2.example.demo.domain.services.models.UserServiceModel;
 
 public interface ValidationService {
 
-    boolean validate (UserServiceModel user);
 
     boolean loginValidation(UserServiceModel user);
 

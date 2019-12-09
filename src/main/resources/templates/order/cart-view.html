@@ -9,7 +9,7 @@
     <div class="container">
         <div class="text-center mb-3">
             <h4 class="text-white mt-2">Cart Page
-                <p th:text="${session.user.getUsername()}"></p></h4>
+            </h4>
         </div>
 
         <form class="mx-auto w-15" th:action="@{cart-view.html}" th:method="post">
@@ -56,7 +56,9 @@
                     <td><b th:text="${#aggregates.sum(session.cart.![price])}" /></td>
                 </tr>
 
-
+                <div class="row justify-content-md-center">
+                    <p class="text-danger" th:text="${error}"></p>
+                </div>
             </table>
             <br>
             <a href="/users/home">Continue

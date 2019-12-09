@@ -5,7 +5,7 @@ import menzonev2.example.demo.domain.services.models.LoginUserServiceModel;
 import menzonev2.example.demo.errors.CheckForUsernameNameException;
 import menzonev2.example.demo.errors.UpdatePasswordsNotMatching;
 import menzonev2.example.demo.repositories.UserRepository;
-import menzonev2.example.demo.services.AuthService;
+import menzonev2.example.demo.services.UserService;
 import menzonev2.example.demo.services.ValidationService;
 import menzonev2.example.demo.web.models.ForgottenPassModel;
 import menzonev2.example.demo.web.models.UpdatePassModel;
@@ -24,13 +24,13 @@ import javax.servlet.http.HttpSession;
 @Scope("session")
 public class PassController {
 
-    private final AuthService authService;
+    private final UserService userService;
     private final UserRepository userRepository;
     private final HttpServletRequest request;
     private final ValidationService validationService;
 
-    public PassController(AuthService authService, UserRepository userRepository, HttpServletRequest request, ValidationService validationService) {
-        this.authService = authService;
+    public PassController(UserService userService, UserRepository userRepository, HttpServletRequest request, ValidationService validationService) {
+        this.userService = userService;
         this.userRepository = userRepository;
         this.request = request;
         this.validationService = validationService;

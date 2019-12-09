@@ -1,5 +1,7 @@
 package menzonev2.example.demo.domain.services.models;
 
+import java.util.Set;
+
 public class UserServiceModel {
 
 //    private String id;
@@ -9,6 +11,8 @@ public class UserServiceModel {
     private String email;
     private String secretQuestion;
     private String secretAnswer;
+    private Set<RoleServiceModel> authorities;
+
 
     public UserServiceModel() {
     }
@@ -59,5 +63,13 @@ public class UserServiceModel {
 
     public void setSecretAnswer(String secretAnswer) {
         this.secretAnswer = secretAnswer;
+    }
+
+    public Set<RoleServiceModel> getAuthorities() {
+        return authorities;
+    }
+
+    public void setAuthorities(Set<RoleServiceModel> authorities) {
+        this.authorities = authorities;
     }
 }

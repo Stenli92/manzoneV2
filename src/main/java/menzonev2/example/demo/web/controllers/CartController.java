@@ -1,8 +1,11 @@
 package menzonev2.example.demo.web.controllers;
 
+import menzonev2.example.demo.domain.entities.Event;
 import menzonev2.example.demo.domain.entities.User;
+import menzonev2.example.demo.domain.services.models.UserServiceModel;
 import menzonev2.example.demo.errors.EmptyCartException;
-import menzonev2.example.demo.services.AuthService;
+import menzonev2.example.demo.repositories.UserRepository;
+import menzonev2.example.demo.services.UserService;
 import menzonev2.example.demo.services.EventService;
 import menzonev2.example.demo.services.OfferService;
 import menzonev2.example.demo.web.models.CartModel;
@@ -20,7 +23,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Controller()
 @RequestMapping("/cart")
@@ -29,15 +31,18 @@ public class CartController {
     private final EventService eventService;
     private final OfferService offerService;
     private final HttpServletRequest request;
-    private final AuthService authService;
+    private final UserService userService;
+    private final UserRepository userRepository;
     private final ModelMapper mapper;
 
     @Autowired
-    public CartController(EventService eventService, OfferService offerService, HttpServletRequest request, AuthService authService, ModelMapper mapper) {
+    public CartController(EventService eventService, OfferService offerService,
+                          HttpServletRequest request, UserService userService, UserRepository userRepository, ModelMapper mapper) {
         this.eventService = eventService;
         this.offerService = offerService;
         this.request = request;
-        this.authService = authService;
+        this.userService = userService;
+        this.userRepository = userRepository;
         this.mapper = mapper;
     }
 
@@ -123,25 +128,23 @@ public class CartController {
 
         User user = (User) session.getAttribute("user");
 
-        int cartTotal = 0;
 
-        for (CartModel cartModel : cart) {
-
-            cartTotal += cartModel.getPrice();
-        }
+        int cartTotal = this.userService.cartAmount(cart);
 
         if (user.getBalance() < cartTotal){
 
-            model.addAttribute("Error" , "You don't have enough money!");
 
-            return "redirect:/cart/index";
+            model.addAttribute("error" ,"You dont have enought money!" );
+
+            return "order/cart-view.html";
 
         }
 
-        int balance = user.getBalance() - cartTotal ;
+        this.userService.updateSellerBalance(cart);
 
-        user.setBalance(balance);
-        this.authService.updateUserBalance(user.getUsername() , balance);
+        this.userService.updateBuyerBalance(cartTotal , user);
+
+
         ((List<CartModel>) session.getAttribute("cart")).clear();
 
         return "redirect:/home";

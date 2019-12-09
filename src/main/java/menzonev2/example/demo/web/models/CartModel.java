@@ -1,13 +1,12 @@
 package menzonev2.example.demo.web.models;
 
 
-import java.math.BigDecimal;
 
 public class CartModel {
 
     private  Long id;
     private  String name;
-    private Double price;
+    private  Double price;
     private  Integer quantity;
 
     public CartModel() {

@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml"
-    xmlns:th="http://www.thymeleaf.org">
+    xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <th:block th:include="~{fragments/head}"/>
 <body>
 <main>
@@ -8,7 +9,7 @@
 
     <div class="container">
         <div class="text-center mb-3">
-            <h4 class="text-white mt-2">Welcome to the arena, <p th:text="${session.user.getUsername()}"></p></h4>
+            <h4 class="text-white mt-2">Welcome to the arena, <span sec:authentication="name"></span></h4>
         </div>
         <th:outputText value="&lt;div class=&quot;row mb-4 d-flex justify-content-around&quot;&gt;"
                       escape="false" rendered="#{status.index % 2 == 0}"/>

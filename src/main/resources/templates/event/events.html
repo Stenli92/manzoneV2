@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml"
-    xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <th:block th:include="~{fragments/head}"/>
 <body>
 <main>
@@ -8,57 +8,62 @@
 
     <div class="container">
         <div class="text-center mb-3">
-            <h4 class="text-white mt-2">Welcome to the arena, <p th:text="${session.user.getUsername()}"></p></h4>
+            <h4 class="text-white mt-2">Welcome to the arena,  <span sec:authentication="name"></span></h4>
         </div>
 
-        <form class="mx-auto w-15" th:action="@{/events/events}" th:method="post">
-        <th:outputText value="&lt;div class=&quot;row mb-4 d-flex justify-content-around&quot;&gt;"
+        <form class="mx-auto w-15" th:action="@{/events}" th:method="post">
+        <th:outputText value="row mb-4 d-flex justify-content-around"
                       escape="false" rendered="#{status.index % 4 == 0}"/>
 
-        <table>
-            <th:block th:each="event , iter : ${events} ">
+            <script type="text/javascript">
+                $(document).ready(
+                    function () {
+                        $.getJSON("/ajax/events",null,  function (response) {
+                            var div = $("#events");
+                            var html = '<table>';
 
-                <tr class="row mx-auto">
-                    <th class="col-md-1 text-center" th:utext="${iter.index + 1}"></th>
-                    <td class="col-md-3">
-                        <div class="text-center">
+                            response.forEach(function(event, index){
+                              html  += '' +
+                                    ' <th>\n' +
+                                    '\n' +
+                                    '                <tr class="row mx-auto">' +
+                                    '                    <th class="col-md-1 text-center"">' + (index+1) + '</th>'+
+                                    '                    <td>';
 
-                            <img th:src="@{/img/football.png}" width="40" height="40"
-                                                      alt="quotes">
-                        </div>
-
-                    <td>
-                        <span th:if="${event.type == 'Concert'}">
-                            <div class="text-center">
-
-                            <img th:src="@{/img/concert.png}" width="40" height="40"
-                                 alt="quotes">
-                        </div>
-                        </span>
-                        <span th:unless="${event.type == 'Concert'}">
-                            <div class="text-center">
-
-                            <img th:src="@{/img/football.png}" width="40" height="40"
-                                 alt="quotes">
-                        </div>
-                        </span>
-                    </td>
-                    </td>
-                    <td class="col-md-3 text-center" th:text="${event.name}"></td>
-                    <td class="col-md-2 text-center" th:text="${event.location}"></td>
-                    <td class="col-md-2 text-center" th:text="${event.date}"></td>
-                    <td class="col-md-2 text-center" th:text="${event.time}"></td>
-                    <td class="col-md-2 text-center" th:text="${event.price}"></td>
-                    <td class="col-md-2 text-center" th:action="@{/events/buyTicket} ">
-                        <a class="btn btn-info mb-2" th:width="300" th:href="@{/cart/buy-ticket/{id}(id=${event.id})}">Add to cart</a>
-                    </td>
+                                var eventTypeImage = "";
+                                if (event.type == "Concert") {
+                                    eventTypeImage = "/img/concert.png";
+                                } else {
+                                    eventTypeImage = "/img/football.png";
+                                }
+                                html +=  '<div class="text-center"><img src="' + eventTypeImage + '" width="40" height="40" alt="quotes"> </div>';
 
 
+                                html +=  '</td>' +
+                                    '                    <td class="col-md-3 text-center">' + event.name + '</td>' +
+                                   ' <td class="col-md-3 text-center">' + event.name + '</td>' +
+                                   ' <td class="col-md-3 text-center">' + event.date + '</td>' +
+                                   ' <td class="col-md-3 text-center">' + event.time + '</td>' +
+                                    '<td class="col-md-3 text-center">' + event.price + '</td>' +
+                                    '<td class="col-md-3 text-center">' + event.price + '</td>' +
+                                    '<td class="col-md-3 text-center"><a class="btn btn-info mb-2" width="300" href="/cart/buy-ticket/'+event.id+'">Add to cart</a></td>' +
+                                    '</tr>';
+                            })
+                            html += '</table>';
+                            div.append(html);
+                            console.log(response);
+                        })
+                    }
+                )
+            </script>
 
-                </tr>
+<!--        <div id="events">-->
+<!--&lt;!&ndash;-->
 
-            </th:block>
-        </table>
+
+
+<!--&lt;!&ndash;            </th:block>&ndash;&gt;-->
+<!--        </div>-->
 
         <th:outputText value="&lt;/div&gt;" escape="false" rendered="#{status.index % 4 == 1}"/>
 
@@ -72,7 +77,11 @@
     </div>
 
 
-    <th:block th:include="~{fragments/footer}"/>
+
 </main>
+
+<footer>
+    <th:block th:include="~{fragments/footer}"/>
+</footer>
 </body>
 </html>

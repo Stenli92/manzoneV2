@@ -1,14 +1,18 @@
 package menzonev2.example.demo.domain.entities;
 
-import menzonev2.example.demo.web.models.CartModel;
+
+
+
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import javax.validation.constraints.Pattern;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table
-public class User extends BaseEntity  {
+public class User extends BaseEntity implements UserDetails {
 
     private static final String EMAIL_PATTERN =
             "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
@@ -18,7 +22,6 @@ public class User extends BaseEntity  {
     private final static Integer MAX_AMOUNT = 1000;
 
     private String username;
-    private String role;
     private String password;
     private String email;
     private String secretQuestion;
@@ -27,29 +30,67 @@ public class User extends BaseEntity  {
     private List<Video> videos ;
     private List<Offer> offers ;
     private List<Event> events ;
+    private Set<Role> authorities;
 
 
     public User() {
     }
 
+    @Override
     @Column(nullable = false , unique = true)
-
     public String getUsername() {
         return username;
     }
-
 
     public void setUsername(String username) {
         this.username = username;
     }
 
-    @Column(nullable = false)
-    public String getRole() {
-        return role;
+
+
+    @Override
+    @ManyToMany(targetEntity = Role.class, fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "users_roles",
+            joinColumns = @JoinColumn(
+                    name = "user_id",
+                    referencedColumnName = "id"
+            ),
+            inverseJoinColumns = @JoinColumn(
+                    name = "role_id",
+                    referencedColumnName = "id"
+            )
+    )
+    public Set<Role> getAuthorities() {
+        return authorities;
     }
 
-    public void setRole(String role) {
-        this.role = role;
+    public void setAuthorities(Set<Role> authorities) {
+        this.authorities = authorities;
+    }
+
+    @Override
+    @Transient
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    @Transient
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    @Transient
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    @Transient
+    public boolean isEnabled() {
+        return true;
     }
 
     @Column(nullable = false)
@@ -124,5 +165,9 @@ public class User extends BaseEntity  {
     public void setEvents(List<Event> events) {
         this.events = events;
     }
+
+
+
+
 
 }
