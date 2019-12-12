@@ -1,24 +1,22 @@
 package menzonev2.example.demo.web.controllers;
 
-import menzonev2.example.demo.domain.entities.User;
-import menzonev2.example.demo.domain.services.models.LoginUserServiceModel;
+
 import menzonev2.example.demo.domain.services.models.UserServiceModel;
 import menzonev2.example.demo.repositories.UserRepository;
 import menzonev2.example.demo.services.UserService;
 import menzonev2.example.demo.services.ValidationService;
-import menzonev2.example.demo.web.models.CartModel;
 import menzonev2.example.demo.web.models.RegisterUserServiceModel;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.support.SessionStatus;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -98,14 +96,24 @@ public class UserController {
         return "user/all-users.html";
     }
 
-    @GetMapping("/delete/{username}")
-    public String deleteUser(@PathVariable("username") String username){
+
+
+    @GetMapping("/details/{username}")
+    public String userDetails(@PathVariable("username") String username , Model model){
+
+        int b = 5;
 
         UserServiceModel user = this.userService.getUser(username);
 
-        this.userService.removeUser(user);
 
-        return "redirect:/users/all-users";
+
+        model.addAttribute("username" , user.getUsername());
+        model.addAttribute("email" , user.getEmail());
+
+
+
+
+        return "/user/user-details.html";
     }
 
 //    @GetMapping("/admin/{username}")
@@ -118,21 +126,19 @@ public class UserController {
 //        return "redirect:/users/all-users";
 //    }
 
-    @PostMapping("/logout")
-    public String logout(SessionStatus status) {
+    @PostMapping("/admin/{username}")
+//    @PreAuthorize("hasRole('ADMIN')")
+    public String setAdminRole(@PathVariable("username") String username) {
+
+        UserServiceModel user = this.userService.getUser(username);
+
+        this.userService.updateToAdmin(user);
 
 
-        HttpSession session = request.getSession(true);
 
-        status.setComplete();
-
-        ((List<CartModel>) session.getAttribute("cart")).clear();
-
-
-        session.invalidate();
-
-        return "redirect:/";
+        return "redirect:/users/all-users";
     }
+
 
 
 

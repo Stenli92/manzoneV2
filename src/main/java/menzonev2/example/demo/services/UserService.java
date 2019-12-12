@@ -21,7 +21,7 @@ public interface UserService extends UserDetailsService {
 
     void removeUser(UserServiceModel user);
 
-//    void updateToAdmin(UserServiceModel user);
+    void updateToAdmin(UserServiceModel user);
 
     List<UserServiceModel>  getAllUsers();
 
@@ -30,5 +30,7 @@ public interface UserService extends UserDetailsService {
     void updateBuyerBalance(int amount , User user);
 
     int cartAmount (List<CartModel> cart );
+
+    User getUserFromContext();
 
 }

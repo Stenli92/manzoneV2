@@ -1,10 +1,13 @@
 package menzonev2.example.demo.web.controllers;
 
+import menzonev2.example.demo.domain.entities.Event;
 import menzonev2.example.demo.domain.entities.Offer;
 import menzonev2.example.demo.domain.entities.User;
 import menzonev2.example.demo.repositories.OfferRepository;
 import menzonev2.example.demo.services.OfferService;
+import menzonev2.example.demo.services.UserService;
 import menzonev2.example.demo.web.models.CreateOfferModel;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,13 +28,17 @@ public class StoreController {
 
     private final OfferService offerService;
     private final OfferRepository offerRepository;
+    private final ModelMapper mapper;
     private final HttpServletRequest request;
+    private final UserService userService;
 
     @Autowired
-    public StoreController(OfferService offerService, OfferRepository offerRepository, HttpServletRequest request) {
+    public StoreController(OfferService offerService, OfferRepository offerRepository, ModelMapper mapper, HttpServletRequest request, UserService userService) {
         this.offerService = offerService;
         this.offerRepository = offerRepository;
+        this.mapper = mapper;
         this.request = request;
+        this.userService = userService;
     }
 
     @ModelAttribute("offerModel")
@@ -62,6 +69,10 @@ public class StoreController {
         }
 
         this.offerService.createOffer(model);
+
+       this.userService.getUserFromContext().getOffers().add(this.mapper.map(model , Offer.class));
+
+
 
         return "redirect:/store/offer-index";
     }

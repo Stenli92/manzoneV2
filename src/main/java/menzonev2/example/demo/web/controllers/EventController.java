@@ -4,21 +4,18 @@ import menzonev2.example.demo.domain.entities.Event;
 import menzonev2.example.demo.domain.entities.User;
 import menzonev2.example.demo.repositories.EventRepository;
 import menzonev2.example.demo.services.EventService;
+import menzonev2.example.demo.services.UserService;
 import menzonev2.example.demo.web.models.CreateEventModel;
-import menzonev2.example.demo.web.models.RegisterUserServiceModel;
-import org.dom4j.rule.Mode;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -29,6 +26,7 @@ public class EventController {
     private final EventService eventService;
     private final ModelMapper modelMapper;
     private final EventRepository eventRepository;
+    private final UserService userService;
     private final HttpServletRequest request;
 
 
@@ -36,10 +34,11 @@ public class EventController {
 
     @Autowired
     public EventController(EventService eventService, ModelMapper modelMapper,
-                           EventRepository eventRepository, HttpServletRequest request) {
+                           EventRepository eventRepository, UserService userService, HttpServletRequest request) {
         this.eventService = eventService;
         this.modelMapper = modelMapper;
         this.eventRepository = eventRepository;
+        this.userService = userService;
         this.request = request;
     }
 
@@ -95,6 +94,9 @@ public class EventController {
 
         this.eventService.createEvent(model);
 
+
+
+        this.userService.getUserFromContext().getEvents().add(this.modelMapper.map(model , Event.class));
         return "redirect:/events/events";
     }
 

@@ -1,8 +1,13 @@
 package menzonev2.example.demo.services.impl;
 
 import menzonev2.example.demo.domain.entities.Event;
+import menzonev2.example.demo.domain.entities.Offer;
+import menzonev2.example.demo.domain.entities.Role;
 import menzonev2.example.demo.domain.entities.User;
 import menzonev2.example.demo.domain.services.models.UserServiceModel;
+import menzonev2.example.demo.errors.CheckForUsernameNameException;
+import menzonev2.example.demo.repositories.EventRepository;
+import menzonev2.example.demo.repositories.OfferRepository;
 import menzonev2.example.demo.repositories.RoleRepository;
 import menzonev2.example.demo.repositories.UserRepository;
 import menzonev2.example.demo.services.RoleService;
@@ -14,7 +19,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -33,22 +37,26 @@ public class UserServiceImpl implements UserService {
     private final ModelMapper mapper;
     private final BCryptPasswordEncoder passwordEncoder;
     private final ValidationService authValidationService;
+    private final OfferRepository offerRepository;
+    private final EventRepository eventRepository;
     private final RoleService roleService;
 
     @Autowired
     public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository,
                            ModelMapper mapper, BCryptPasswordEncoder passwordEncoder,
-                           ValidationService authValidationService, RoleService roleService) {
+                           ValidationService authValidationService, OfferRepository offerRepository, EventRepository eventRepository, RoleService roleService) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.mapper = mapper;
         this.passwordEncoder = passwordEncoder;
         this.authValidationService = authValidationService;
+        this.offerRepository = offerRepository;
+        this.eventRepository = eventRepository;
         this.roleService = roleService;
     }
 
 
-//    @Override
+    @Override
     public String register(UserServiceModel userServiceModel) {
 
 
@@ -125,24 +133,53 @@ public class UserServiceImpl implements UserService {
 
         UserServiceModel seller = new UserServiceModel();
 
+
         for (CartModel cartModel : cart) {
 
-            for (User user : userList) {
+            if (cartModel.getType().equals("Football")
+                    ||cartModel.getType().equals("Concert")  ){
 
-                List<Event> events = user.getEvents();
+                for (User user : userList) {
 
-                for (Event event : events) {
 
-                    if (event.getName().equals(cartModel.getName())){
+                    List<Event> events = user.getEvents();
 
-                        user.setBalance((int) (user.getBalance() + cartModel.getPrice()));
+                    for (Event event : events) {
 
-                        this.userRepository.save(user);
+                        if (event.getName().equals(cartModel.getName())){
+
+                            user.setBalance((int) (user.getBalance() + cartModel.getPrice()));
+
+                            this.userRepository.save(user);
+                        }
+
                     }
+
 
                 }
 
+            }else {
+
+                for (User user : userList) {
+
+
+                    List<Offer> offers = user.getOffers();
+
+                    for (Offer offer : offers) {
+
+                        if (offer.getName().equals(cartModel.getName())){
+
+                            user.setBalance((int) (user.getBalance() + cartModel.getPrice()));
+
+                            this.userRepository.save(user);
+                        }
+
+                    }
+
+
+                }
             }
+
 
         }
 
@@ -160,24 +197,43 @@ public class UserServiceImpl implements UserService {
         return amount;
     }
 
+    @Override
+    public User getUserFromContext() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+        User user = this.userRepository.findByUsername(auth.getName()).orElse(null);
+
+        return user;
+
+    }
+
     public void updateBuyerBalance(int amount , User user) {
 
-        user.setBalance(user.getBalance() - amount);
+        int balance = user.getBalance() - amount;
+
+        user.setBalance(balance);
 
         this.userRepository.save(user);
 
     }
 
-    //    @Override
-//    public void updateToAdmin(UserServiceModel user) {
-//
-//        User userToUpdate = this.userRepository.findByUsername(user.getUsername()).orElse(null);
-//
-////        userToUpdate.setRole("Admin");
-//
-//        this.userRepository.save(userToUpdate);
-//
-//    }
+        @Override
+    public void updateToAdmin(UserServiceModel user) {
+
+        User userToUpdate = this.userRepository.findByUsername(user.getUsername())
+                .orElseThrow(()->new CheckForUsernameNameException("No such user found"));
+
+        UserServiceModel userServiceModel = this.mapper.map(userToUpdate , UserServiceModel.class);
+
+            userServiceModel.getAuthorities().clear();
+            userServiceModel.getAuthorities().add(this.roleService.finByAuthority("USER"));
+            userServiceModel.getAuthorities().add(this.roleService.finByAuthority("ADMIN"));
+            System.out.println();
+
+            this.userRepository.saveAndFlush(this.mapper.map(userServiceModel , User.class));
+
+
+    }
 
 
     public List<UserServiceModel> getAllUsers() {

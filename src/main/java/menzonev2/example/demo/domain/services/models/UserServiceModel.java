@@ -4,7 +4,7 @@ import java.util.Set;
 
 public class UserServiceModel {
 
-//    private String id;
+    private Long id;
     private String username;
     private String password;
     private String confirmPassword;
@@ -15,6 +15,14 @@ public class UserServiceModel {
 
 
     public UserServiceModel() {
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getUsername() {

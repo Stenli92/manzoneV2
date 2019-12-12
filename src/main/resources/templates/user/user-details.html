@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<th:block th:include="~{fragments/head}"/>
+<body>
+<main>
+    <th:block th:include="~{fragments/user-navbar}"/>
+
+    <div class="container">
+        <div class="text-center mb-3">
+            <h4 class="text-white mt-2">User Details</h4>
+        </div>
+
+        <form class="mx-auto w-15 text-center" th:action="@{user-details.html}" th:method="post">
+            <th:outputText value="&lt;div class=&quot;row mb-4 d-flex justify-content-around&quot;&gt;"
+                           escape="false" rendered="#{status.index % 4 == 0}"/>
+
+
+
+            <div class="button-holder d-flex justify-content-center"  th:class="news">
+
+
+                <img th:src="@{/img/user-icon.png}" width="300" height="300"/>
+
+                <a>
+                    <h3 style="color: #fff" th:text="${username}"></h3>
+                </a>
+                <a>
+                    <h3 style="color: #fff" th:text="${email}"></h3>
+                </a>
+
+            </div>
+
+            <th:outputText value="&lt;/div&gt;" escape="false" rendered="#{status.index % 4 == 1}"/>
+
+        </form>
+
+    </div>
+
+
+
+
+</main>
+<th:block th:include="~{fragments/footer}"/>
+</body>
+</html>

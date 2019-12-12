@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml"
-    xmlns:th="http://www.thymeleaf.org">
+    xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <th:block th:include="~{fragments/head}"/>
 <body>
 <main>
@@ -8,32 +9,74 @@
 
     <div class="container">
         <div class="text-center mb-3">
-            <h4 class="text-white mt-2">Welcome to the arena, <p th:text="${session.user.getUsername()}"></p></h4>
+            <h4 class="text-white mt-2">Users</h4>
         </div>
         <th:outputText value="&lt;div class=&quot;row mb-4 d-flex justify-content-around&quot;&gt;"
                       escape="false" rendered="#{status.index % 2 == 0}"/>
 
 
-        <table>
-            <th:block th:each="user , iter : ${users} ">
+<!--        <table>-->
+<!--            <th:block th:each="user , iter : ${users} ">-->
 
+<!--                <tr class="row mx-auto">-->
+<!--                    <th class="col-md-1 text-center" th:utext="${iter.index + 1}"></th>-->
+<!--                    <td class="col-md-3 text-center" th:utext="${user.username}"></td>-->
+<!--                    <td class="col-md-2 text-center" th:utext="${user.email}"></td>-->
+<!--                    <th:block th:each="authorities : ${user.authorities}">-->
+<!--                        <td class="col-md-2 text-center"-->
+<!--                            th:utext="${authorities.authority}">-->
+<!--                        </td>-->
+<!--                    </th:block>-->
+
+<!--            </th:block>-->
+<!--        </table>-->
+
+        <table class="table table-hover w-75 mx-auto">
+            <thead>
+            <tr class="row mx-auto">
+                <th class="col-md-1 text-center">#</th>
+                <th class="col-md-3 text-center">Username</th>
+                <th class="col-md-2 text-center">Email</th>
+                <th class="col-md-2 text-center">Roles</th>
+            </tr>
+            </thead>
+            <tbody>
+            <th:block th:each="users, iter : ${users}">
                 <tr class="row mx-auto">
-                    <th class="col-md-6 text-center" th:utext="${iter.index + 1}"></th>
-                    <td class="col-md-6">
-                        <div class="text-center">
+                    <th class="col-md-1 text-center" th:utext="${iter.index + 1}"></th>
+                    <td class="col-md-3 text-center" th:utext="${users.username}"></td>
+                    <td class="col-md-2 text-center" th:utext="${users.email}"></td>
+                    <th:block th:each="authorities : ${users.authorities}">
+                        <td class="col-md-2 text-center"
+                            th:utext="${authorities.authority}">
+                        </td>
+                    </th:block>
 
-                            <img th:src="@{/img/football.png}" width="40" height="40"
-                                 alt="quotes">
+                    <th:block sec:authorize="hasRole('ROOT')">
+                        <th:block th:if="${#lists.size(users.authorities) == 2}">
+                            <td class="col-md-2 text-center">
+                                <form th:action="@{/users/set-user/{id}(id=${users.id})}" method="post">
+                                    <button class="btn btn-dark btn-width">USER</button>
+                                </form>
+                            </td>
+                        </th:block>
+                    </th:block>
 
-                            <h4 th:text="${user.username}"></h4>
-                            <a class="btn btn-info mb-2" th:href="@{/users/admin/{username}(username=${user.username})}">Make Admin</a>
-                            <a class="btn btn-danger" th:href="@{/users/delete/{username}(username=${user.username})}">Delete User</a>
-
-                        </div>
+                    <th:block sec:authorize="hasAuthority('ADMIN')" th:if="${#lists.size(users.authorities) == 1}">
+                        <td class="col-md-2 text-center">
+                            <form th:action="@{/users/admin/{username}(username=${users.username})}" method="post" >
+                                <button class="btn btn-dark btn-width">ADMIN</button>
+                            </form>
+                        </td>
+                    </th:block>
+                    <td class="col-md-2 text-center">
+                        <form th:action="@{/users/details/{username}(username=${users.username})}">
+                            <button class="btn btn-dark btn-width">Details</button>
+                        </form>
                     </td>
                 </tr>
-
             </th:block>
+            </tbody>
         </table>
 
 

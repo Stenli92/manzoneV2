@@ -8,6 +8,7 @@ public class CartModel {
     private  String name;
     private  Double price;
     private  Integer quantity;
+    private  String type;
 
     public CartModel() {
     }
@@ -42,5 +43,13 @@ public class CartModel {
 
     public void setQuantity(Integer quantity) {
         this.quantity = quantity;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }

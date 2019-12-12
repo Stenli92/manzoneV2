@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <th:block th:include="~{fragments/head}"/>
 <body>
 <main>
@@ -67,7 +68,7 @@
 
         <th:outputText value="&lt;/div&gt;" escape="false" rendered="#{status.index % 4 == 1}"/>
 
-        <div class="button-holder d-flex justify-content-center">
+        <div sec:authorize="hasAuthority('ADMIN')" class="button-holder d-flex justify-content-center">
             <a href="/events/create-event">
                 <h2 style="color: #fff">Create Event</h2>
             </a>

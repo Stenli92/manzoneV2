@@ -1,8 +1,6 @@
 package menzonev2.example.demo.web.controllers;
 
-import menzonev2.example.demo.domain.entities.Event;
 import menzonev2.example.demo.domain.entities.User;
-import menzonev2.example.demo.domain.services.models.UserServiceModel;
 import menzonev2.example.demo.errors.EmptyCartException;
 import menzonev2.example.demo.repositories.UserRepository;
 import menzonev2.example.demo.services.UserService;
@@ -11,6 +9,8 @@ import menzonev2.example.demo.services.OfferService;
 import menzonev2.example.demo.web.models.CartModel;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -126,8 +126,9 @@ public class CartController {
 
         List<CartModel> cart = (List<CartModel>) session.getAttribute("cart");
 
-        User user = (User) session.getAttribute("user");
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
+        User user = this.userRepository.findByUsername(authentication.getName()).orElse(null);
 
         int cartTotal = this.userService.cartAmount(cart);
 
@@ -141,7 +142,6 @@ public class CartController {
         }
 
         this.userService.updateSellerBalance(cart);
-
         this.userService.updateBuyerBalance(cartTotal , user);
 
 

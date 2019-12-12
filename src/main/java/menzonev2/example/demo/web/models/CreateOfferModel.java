@@ -17,7 +17,6 @@ public class CreateOfferModel {
 
     @NotEmpty(message = "Field cannot be empty")
     @Size(min = 3 , message = "Color should have between 3 and 15 digits")
-    @Pattern(regexp = "^[a-z][a-z\\s]*$" , message = "Field should contain only letters")
     private String color;
 
     @Min(value = 1 , message = "Price cannot be zero or a negative number")
