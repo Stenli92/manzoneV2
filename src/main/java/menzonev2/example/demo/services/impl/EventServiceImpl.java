@@ -2,6 +2,7 @@ package menzonev2.example.demo.services.impl;
 
 import menzonev2.example.demo.domain.entities.Event;
 import menzonev2.example.demo.domain.entities.User;
+import menzonev2.example.demo.domain.services.models.SessionUserModel;
 import menzonev2.example.demo.repositories.EventRepository;
 import menzonev2.example.demo.repositories.UserRepository;
 import menzonev2.example.demo.services.EventService;
@@ -53,11 +54,16 @@ public class EventServiceImpl implements EventService {
 
 
     @Override
-    public List<CreateEventModel> getAllUserEvents(User user) {
+    public List<CreateEventModel> getAllUserEvents(SessionUserModel sessionUserModel) {
 
         HttpSession session = request.getSession(true);
 
+        User user = this.mapper.map(sessionUserModel , User.class);
+
+        System.out.println();
         List<Event> models = this.eventRepository.findAllByUser(user);
+
+
 
         return models.stream().map(m -> this.mapper.map(m , CreateEventModel.class)).collect(Collectors.toList());
     }

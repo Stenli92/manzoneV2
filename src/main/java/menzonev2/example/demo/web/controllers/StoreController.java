@@ -3,12 +3,16 @@ package menzonev2.example.demo.web.controllers;
 import menzonev2.example.demo.domain.entities.Event;
 import menzonev2.example.demo.domain.entities.Offer;
 import menzonev2.example.demo.domain.entities.User;
+import menzonev2.example.demo.domain.services.models.OfferServiceModel;
+import menzonev2.example.demo.domain.services.models.SessionUserModel;
 import menzonev2.example.demo.repositories.OfferRepository;
 import menzonev2.example.demo.services.OfferService;
 import menzonev2.example.demo.services.UserService;
 import menzonev2.example.demo.web.models.CreateOfferModel;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -81,8 +85,13 @@ public class StoreController {
     @GetMapping("/tshirts")
     public String tshirts(Model model){
 
-        List<Offer> offers = this.offerRepository.findAllByType("T-Shirt");
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
+        SessionUserModel user = this.mapper.map(this.userService.getUser(auth.getName()) , SessionUserModel.class);
+
+        List<OfferServiceModel> offers = this.offerService.getAllTShirtOffersExceptCXs(user);
+
+        System.out.println();
         model.addAttribute("offers" , offers);
 
         return "/offer/tshirts.html";
@@ -91,21 +100,30 @@ public class StoreController {
     @GetMapping("/shoes")
     public String shoes(Model model){
 
-        List<Offer> offers = this.offerRepository.findAllByType("Shoe");
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
+        SessionUserModel user = this.mapper.map(this.userService.getUser(auth.getName()) , SessionUserModel.class);
+
+        List<OfferServiceModel> offers = this.offerService.getAllShoeOffersExceptCXs(user);
+
+        System.out.println();
         model.addAttribute("offers" , offers);
 
-        return "/offer/shoes.html";
+        return "/offer/tshirts.html";
     }
 
     @GetMapping("/accessories")
     public String accessories(Model model){
 
-        List<Offer> offers = this.offerRepository.findAllByType("Accessory");
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+        SessionUserModel user = this.mapper.map(this.userService.getUser(auth.getName()) , SessionUserModel.class);
+
+        List<OfferServiceModel> offers = this.offerService.getAllAccOffersExceptCXs(user);
 
         model.addAttribute("offers" , offers);
 
-        return "/offer/accessories.html";
+        return "/offer/tshirts.html";
     }
 
     @GetMapping("/my-offers")
@@ -113,7 +131,7 @@ public class StoreController {
 
         HttpSession session = request.getSession(true);
 
-        User user = (User) session.getAttribute("user");
+        SessionUserModel user = (SessionUserModel) session.getAttribute("user");
 
         List<CreateOfferModel> offers = this.offerService.getAllOffersByUser(user);
 

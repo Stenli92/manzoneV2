@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <th:block th:include="~{fragments/head}"/>
 <body>
 <main>
@@ -8,7 +9,7 @@
 
     <div class="container">
         <div class="text-center mb-3">
-            <h4 class="text-white mt-2"><span sec:authentication="name"/>'s profile</h4>
+            <h4 class="text-white mt-2"><p th:text="${session.user.getUsername()}"></p>'s profile</h4>
 
 
             <ul class="navbar-nav ml-auto">
@@ -16,26 +17,44 @@
 
                 <li class="nav-item active col-md-6 " style="white-space: nowrap;">
                     <a title="Profile" href="/videos/myvideos">
-                        <h3> My Videos</h3></a>
+                        <h3 style="color: #fff"> My Videos</h3></a>
                 </li>
-                <li class="nav-item active col-md-6 " style="white-space: nowrap;">
+                <li sec:authorize="hasAuthority('ADMIN')" class="nav-item active col-md-6 " style="white-space: nowrap;">
                     <a title="Profile" href="/events/myevents">
-                        <h3> My Events</h3></a>
+                        <h3 style="color: #fff"> My Events</h3></a>
                 </li>
 
                 <li class="nav-item active col-md-6 " style="white-space: nowrap;">
                     <a title="Profile" href="/store/my-offers">
-                        <h3> My Offers </h3></a>
+                        <h3 style="color: #fff"> My Offers </h3></a>
                 </li>
                 <li class="nav-item active col-md-6 " style="white-space: nowrap;">
                     <a title="Profile" href="/passwords/update-password">
-                        <h3> Change Password</h3></a>
+                        <h3 style="color: #fff"> Change Password</h3></a>
                 </li>
 
                 <li class="nav-item active col-md-6 " style="white-space: nowrap;">
                     <a title="Profile" href="/users/update-balance">
-                        <h3>Update Balance</h3></a>
+                        <h3 style="color: #fff">Update Balance</h3></a>
                 </li>
+
+                <li sec:authorize="hasAuthority('ADMIN')" class="nav-item active col-md-6 " style="white-space: nowrap;">
+                    <a title="Profile" href="/users/all-users">
+                        <h3 style="color: #fff">All Users</h3></a>
+                </li>
+
+                <li sec:authorize="hasAuthority('ADMIN')" class="nav-item active col-md-6 " style="white-space: nowrap;">
+                    <a href="/events/create-event">
+                        <h4 class="btn btn-info mb-2" style="color: #fff">Create Event</h4>
+                    </a>
+                </li>
+
+                <li sec:authorize="hasAuthority('ADMIN')" class="nav-item active col-md-6 " style="white-space: nowrap;">
+                    <a href="/news/create-news">
+                        <h4 class="btn btn-info mb-2" style="color: #fff">Upload News</h4>
+                    </a>
+                </li>
+
                 </div>
 
             </ul>
@@ -46,7 +65,37 @@
     </div>
 
 
-    <th:block th:include="~{fragments/footer}"/>
+
+    <div id="navbar"><span>Red Stapler - Geolocation API</span></div>
+    <div id="wrapper">
+        <button id="location-button">Get User Location</button>
+        <div id="output"></div>
+    </div>
+
+    <script>
+        $('#location-button').click(function(){
+
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position){
+                    console.log(position);
+                    $.get( "http://maps.googleapis.com/maps/api/geocode/json?latlng="+ position.coords.latitude + "," + position.coords.longitude +"&sensor=false", function(data) {
+                        console.log(data);
+                    })
+                    var img = new Image();
+                    img.src = "https://maps.googleapis.com/maps/api/staticmap?center=" + position.coords.latitude + "," + position.coords.longitude + "&zoom=13&size=800x400&sensor=false";
+                    $('#output').html(img);
+                });
+
+            }
+        });
+
+
+    </script>
+
+
 </main>
+<footer>
+    <th:block th:include="~{fragments/footer}"/>
+</footer>
 </body>
 </html>

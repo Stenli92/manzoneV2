@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml"
-    xmlns:th="http://www.thymeleaf.org">
+    xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <th:block th:include="~{fragments/head}"/>
 <body>
 <main>
@@ -29,6 +30,7 @@
                                         frameborder="1" alt="no video attached" allowfullscreen="0"></iframe>
                             </div>
                         </td>
+
                     </tr>
                 </th:block>
             </table>
@@ -40,7 +42,9 @@
     </div>
 
 
-    <th:block th:include="~{fragments/footer}"/>
 </main>
+<footer>
+    <th:block th:include="~{fragments/footer}"/>
+</footer>
 </body>
 </html>

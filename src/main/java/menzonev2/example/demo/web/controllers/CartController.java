@@ -66,7 +66,7 @@ public class CartController {
 
 
         CartModel cartModel = this.mapper.map(this.eventService.getByID(id) , CartModel.class);
-        cartModel.setId(id);
+//        cartModel.setId(id);
         if (session.getAttribute("cart") == null) {
             List<CartModel> cart = new ArrayList<CartModel>();
             cartModel.setQuantity(1);
@@ -90,7 +90,7 @@ public class CartController {
 
 
         CartModel cartModel = this.mapper.map(this.offerService.getById(id) , CartModel.class);
-        cartModel.setId(id);
+//        cartModel.setId(id);
         if (session.getAttribute("cart") == null) {
             List<CartModel> cart = new ArrayList<CartModel>();
             cartModel.setQuantity(1);

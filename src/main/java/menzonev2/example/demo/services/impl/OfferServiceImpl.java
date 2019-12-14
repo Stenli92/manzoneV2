@@ -2,6 +2,8 @@ package menzonev2.example.demo.services.impl;
 
 import menzonev2.example.demo.domain.entities.Offer;
 import menzonev2.example.demo.domain.entities.User;
+import menzonev2.example.demo.domain.services.models.OfferServiceModel;
+import menzonev2.example.demo.domain.services.models.SessionUserModel;
 import menzonev2.example.demo.repositories.OfferRepository;
 import menzonev2.example.demo.repositories.UserRepository;
 import menzonev2.example.demo.services.OfferService;
@@ -48,9 +50,9 @@ public class OfferServiceImpl implements OfferService {
     }
 
     @Override
-    public List<CreateOfferModel> getAllOffersByUser(User user) {
+    public List<CreateOfferModel> getAllOffersByUser(SessionUserModel user) {
 
-        List<Offer> offers = this.offerRepository.findAllByUser(user);
+        List<Offer> offers = this.offerRepository.findAllByUser(this.mapper.map(user , User.class));
 
         return offers.stream().map(o -> this.mapper.map( o , CreateOfferModel.class)).collect(Collectors.toList());
     }
@@ -58,5 +60,38 @@ public class OfferServiceImpl implements OfferService {
     @Override
     public CreateOfferModel getById(Long id) {
         return this.mapper.map(this.offerRepository.findById(id) , CreateOfferModel.class);
+    }
+
+    @Override
+    public List<OfferServiceModel> getAllTShirtOffersExceptCXs(SessionUserModel user) {
+
+
+        List<Offer> offers = this.offerRepository.findAllByType("T-Shirt");
+
+        return offers.stream().filter(e -> !e.getUser().getUsername().equals(user.getUsername())).
+                map(e -> mapper.map(e, OfferServiceModel.class)).collect(Collectors.toList());
+
+    }
+
+    @Override
+    public List<OfferServiceModel> getAllShoeOffersExceptCXs(SessionUserModel user) {
+
+
+        List<Offer> offers = this.offerRepository.findAllByType("Shoe");
+
+        return offers.stream().filter(e -> !e.getUser().getUsername().equals(user.getUsername())).
+                map(e -> mapper.map(e, OfferServiceModel.class)).collect(Collectors.toList());
+
+    }
+
+    @Override
+    public List<OfferServiceModel> getAllAccOffersExceptCXs(SessionUserModel user) {
+
+
+        List<Offer> offers = this.offerRepository.findAllByType("Accessory");
+
+        return offers.stream().filter(e -> !e.getUser().getUsername().equals(user.getUsername())).
+                map(e -> mapper.map(e, OfferServiceModel.class)).collect(Collectors.toList());
+
     }
 }

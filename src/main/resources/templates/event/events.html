@@ -17,18 +17,21 @@
                       escape="false" rendered="#{status.index % 4 == 0}"/>
 
             <script type="text/javascript">
+                function escapeHTML(string) {
+                    var div = document.createElement("div")
+                    div.innerHTML = string
+                    return div.innerText;
+                }
                 $(document).ready(
                     function () {
-                        $.getJSON("/ajax/events",null,  function (response) {
+                        $.getJSON("/events/ajax/events",null,  function (response) {
                             var div = $("#events");
-                            var html = '<table>';
+                            var html = '<table width="100%" id="events-table" cellspacing="10"><tr><th></th><th></th><th>Name</th><th>Location</th><th>Date</th><th>Time</th><th>Price</th></tr>';
 
                             response.forEach(function(event, index){
                               html  += '' +
-                                    ' <th>\n' +
-                                    '\n' +
-                                    '                <tr class="row mx-auto">' +
-                                    '                    <th class="col-md-1 text-center"">' + (index+1) + '</th>'+
+                                    '                <tr>' +
+                                    '                    <td>' + (index+1) + '</td>'+
                                     '                    <td>';
 
                                 var eventTypeImage = "";
@@ -37,42 +40,30 @@
                                 } else {
                                     eventTypeImage = "/img/football.png";
                                 }
-                                html +=  '<div class="text-center"><img src="' + eventTypeImage + '" width="40" height="40" alt="quotes"> </div>';
+                                html +=  '<img src="' + eventTypeImage + '" width="40" height="40" alt="quotes">';
 
 
                                 html +=  '</td>' +
-                                    '                    <td class="col-md-3 text-center">' + event.name + '</td>' +
-                                   ' <td class="col-md-3 text-center">' + event.name + '</td>' +
-                                   ' <td class="col-md-3 text-center">' + event.date + '</td>' +
-                                   ' <td class="col-md-3 text-center">' + event.time + '</td>' +
-                                    '<td class="col-md-3 text-center">' + event.price + '</td>' +
-                                    '<td class="col-md-3 text-center">' + event.price + '</td>' +
-                                    '<td class="col-md-3 text-center"><a class="btn btn-info mb-2" width="300" href="/cart/buy-ticket/'+event.id+'">Add to cart</a></td>' +
+                                    '                    <td>' + escapeHTML(event.name) + '</td>' +
+                                   ' <td>' + escapeHTML(event.location) + '</td>' +
+                                   ' <td>' + escapeHTML(event.date) + '</td>' +
+                                   ' <td>' + escapeHTML(event.time) + '</td>' +
+                                    '<td>' + escapeHTML(event.price) + '</td>' +
+                                    '<td><a class="btn btn-info mb-2" width="300" href="/cart/buy-ticket/'+event.id+'">Add to cart</a></td>' +
                                     '</tr>';
                             })
                             html += '</table>';
-                            div.append(html);
+                            div.html(html);
                             console.log(response);
                         })
                     }
                 )
             </script>
 
-<!--        <div id="events">-->
-<!--&lt;!&ndash;-->
-
-
-
-<!--&lt;!&ndash;            </th:block>&ndash;&gt;-->
-<!--        </div>-->
+        <div id="events"></div>
 
         <th:outputText value="&lt;/div&gt;" escape="false" rendered="#{status.index % 4 == 1}"/>
 
-        <div sec:authorize="hasAuthority('ADMIN')" class="button-holder d-flex justify-content-center">
-            <a href="/events/create-event">
-                <h2 style="color: #fff">Create Event</h2>
-            </a>
-        </div>
         </form>
 
     </div>

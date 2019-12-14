@@ -5,6 +5,8 @@ import javax.validation.constraints.*;
 
 public class CreateEventModel {
 
+    private Long id;
+
     @NotEmpty(message = "Field cannot be empty")
     @Size(min = 3 , max = 15 , message = "Name should have between 3 and 15 digits")
     private String name;
@@ -29,6 +31,14 @@ public class CreateEventModel {
     private Integer price;
 
     public CreateEventModel() {
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getName() {

@@ -1,5 +1,6 @@
 package menzonev2.example.demo.domain.services.models;
 
+import java.math.BigDecimal;
 import java.util.Set;
 
 public class UserServiceModel {
@@ -9,8 +10,7 @@ public class UserServiceModel {
     private String password;
     private String confirmPassword;
     private String email;
-    private String secretQuestion;
-    private String secretAnswer;
+    private BigDecimal balance;
     private Set<RoleServiceModel> authorities;
 
 
@@ -57,21 +57,6 @@ public class UserServiceModel {
         this.email = email;
     }
 
-    public String getSecretQuestion() {
-        return secretQuestion;
-    }
-
-    public void setSecretQuestion(String secretQuestion) {
-        this.secretQuestion = secretQuestion;
-    }
-
-    public String getSecretAnswer() {
-        return secretAnswer;
-    }
-
-    public void setSecretAnswer(String secretAnswer) {
-        this.secretAnswer = secretAnswer;
-    }
 
     public Set<RoleServiceModel> getAuthorities() {
         return authorities;
@@ -79,5 +64,13 @@ public class UserServiceModel {
 
     public void setAuthorities(Set<RoleServiceModel> authorities) {
         this.authorities = authorities;
+    }
+
+    public BigDecimal getBalance() {
+        return balance;
+    }
+
+    public void setBalance(BigDecimal balance) {
+        this.balance = balance;
     }
 }

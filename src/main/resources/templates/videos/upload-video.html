@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
 <th:block th:include="~{fragments/head}"/>
 <body>
 <main>
@@ -14,6 +15,7 @@
                     <div class="label-holder text-white d-flex justify-content-center">
                         <label for="title" class="h3 mb-2">Title</label>
                     </div>
+                    <p style="color: red" th:text="${error}"></p>
                     <input type="text" class="form-control" id="title" name="title"/>
                     <ul th:if="${#fields.errors('title')}">
                         <li class="text-danger" th:each="error : ${#fields.errors('title')} " th:text="${error}"></li>
@@ -57,7 +59,9 @@
         </div>
     </form>
 </main>
-<th:block th:include="~{fragments/footer}"/>
+<footer>
+    <th:block th:include="~{fragments/footer}"/>
+</footer>
 
 </body>
 </html>

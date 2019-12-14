@@ -2,6 +2,7 @@ package menzonev2.example.demo.web.controllers;
 
 import menzonev2.example.demo.domain.entities.Event;
 import menzonev2.example.demo.domain.entities.User;
+import menzonev2.example.demo.domain.services.models.SessionUserModel;
 import menzonev2.example.demo.repositories.EventRepository;
 import menzonev2.example.demo.services.EventService;
 import menzonev2.example.demo.services.UserService;
@@ -69,13 +70,6 @@ public class EventController {
     @ResponseBody
     public List<CreateEventModel> AjaxEvents(){
 
-//        List<Event> eventList = this.eventRepository.findAll();
-//
-//        List<Event> events = new ArrayList<>();
-//
-//        for (Event event : eventList) {
-//            events.add(event);
-//        }
 
         return this.eventRepository.findAll().stream()
                 .map(e-> this.modelMapper.map(e , CreateEventModel.class)).collect(Collectors.toList());
@@ -105,10 +99,12 @@ public class EventController {
 
         HttpSession session = request.getSession(true);
 
-        User user = (User) session.getAttribute("user");
+        SessionUserModel user = (SessionUserModel) session.getAttribute("user");
 
 
         List<CreateEventModel> events = this.eventService.getAllUserEvents(user);
+
+        System.out.println();
 
         model.addAttribute("events" , events);
 

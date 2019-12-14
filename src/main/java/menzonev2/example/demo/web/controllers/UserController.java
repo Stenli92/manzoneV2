@@ -9,12 +9,10 @@ import menzonev2.example.demo.web.models.RegisterUserServiceModel;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -29,14 +27,16 @@ public class UserController {
     private final UserService userService;
     private final ValidationService authValidationService;
     private final UserRepository userRepository;
+    private final ValidationService validationService;
     private final HttpServletRequest request;
 
     @Autowired
-    public UserController(ModelMapper mapper, UserService userService, ValidationService authValidationService, UserRepository userRepository, HttpServletRequest request) {
+    public UserController(ModelMapper mapper, UserService userService, ValidationService authValidationService, UserRepository userRepository, ValidationService validationService, HttpServletRequest request) {
         this.mapper = mapper;
         this.userService = userService;
         this.authValidationService = authValidationService;
         this.userRepository = userRepository;
+        this.validationService = validationService;
         this.request = request;
     }
 
@@ -62,7 +62,7 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public String register(@Valid @ModelAttribute("registerModel") RegisterUserServiceModel model , BindingResult result) {
+    public String register(@Valid @ModelAttribute("registerModel") RegisterUserServiceModel userModel , BindingResult result , Model model) {
 
         if (result.hasErrors()){
 
@@ -70,10 +70,13 @@ public class UserController {
             return "/auth/register";
         }
 
+        if (!this.validationService.registerValidation(userModel , model)){
 
-        UserServiceModel serviceModel = mapper.map(model, UserServiceModel.class);
+            return "/auth/register";
 
-        this.userService.register(serviceModel);
+        }
+
+        this.userService.register(userModel);
 
         return "redirect:/users/login";
     }
@@ -101,7 +104,6 @@ public class UserController {
     @GetMapping("/details/{username}")
     public String userDetails(@PathVariable("username") String username , Model model){
 
-        int b = 5;
 
         UserServiceModel user = this.userService.getUser(username);
 
@@ -127,7 +129,6 @@ public class UserController {
 //    }
 
     @PostMapping("/admin/{username}")
-//    @PreAuthorize("hasRole('ADMIN')")
     public String setAdminRole(@PathVariable("username") String username) {
 
         UserServiceModel user = this.userService.getUser(username);
@@ -135,6 +136,28 @@ public class UserController {
         this.userService.updateToAdmin(user);
 
 
+
+        return "redirect:/users/all-users";
+    }
+
+    @PostMapping("/set-user/{username}")
+    public String setUserRole(@PathVariable("username") String username) {
+
+        UserServiceModel user = this.userService.getUser(username);
+
+        System.out.println();
+
+        this.userService.setToUser(user);
+
+
+        return "redirect:/users/all-users";
+    }
+
+    @PostMapping("/delete/{id}")
+//    @PreAuthorize("hasRole('ADMIN')")
+    public String deleteUser(@PathVariable("id") Long id) {
+
+        this.userService.deleteUser(id);
 
         return "redirect:/users/all-users";
     }

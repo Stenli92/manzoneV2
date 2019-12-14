@@ -42,3 +42,11 @@ body {
     -moz-column-width: 400px; /* Firefox */
     column-width: 400px;
 }
+
+.navbar-nav li {
+    margin: 10px
+}
+
+#events-table th {
+    font-weight: bold;
+}

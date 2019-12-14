@@ -1,6 +1,7 @@
 package menzonev2.example.demo.web.controllers;
 
 import menzonev2.example.demo.domain.entities.User;
+import menzonev2.example.demo.domain.services.models.SessionUserModel;
 import menzonev2.example.demo.repositories.UserRepository;
 import menzonev2.example.demo.services.UserService;
 import menzonev2.example.demo.web.models.UpdateBalanceModel;
@@ -34,6 +35,7 @@ public class ProfileController {
 
     @GetMapping("/myprofile")
     public String  myprofile(){
+
         return new String("/user/myprofile.html");
     }
 
@@ -51,29 +53,20 @@ public class ProfileController {
     @PostMapping("/update-balance")
     public String updateBalanceCommit(@ModelAttribute UpdateBalanceModel updateBalanceModel){
 
-        HttpSession session = request.getSession();
+        HttpSession session = request.getSession(true);
 
-        User user = (User) session.getAttribute("user");
-
-        String pass = encoder.encode(updateBalanceModel.getPassword());
+        SessionUserModel user = (SessionUserModel) session.getAttribute("user");
 
 
-        if (!pass.equals(user.getPassword())){
+        if (this.userService.confirmPassValidation(user , updateBalanceModel)){
 
             return "/user/update-balance.html";
         }
 
-        if (!updateBalanceModel.getPassword().equals(updateBalanceModel.getConfirmPass())){
 
-            return "/user/update-balance.html";
 
-        }
+        this.userService.setNewBalance(user , updateBalanceModel);
 
-        Integer newBalace = user.getBalance() + updateBalanceModel.getMoneyToInsert();
-
-        user.setBalance(newBalace);
-
-        this.userRepository.save(user);
 
 
         return "redirect:/users/myprofile";

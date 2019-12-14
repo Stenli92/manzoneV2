@@ -27,6 +27,7 @@
                     </td>
                 </tr>
 
+
             </th:block>
 
         <th:outputText value="&lt;/div&gt;" escape="false" rendered="#{status.index % 4 == 1}"/>
@@ -38,6 +39,8 @@
 
 </main>
 </body>
-<th:block th:include="~{fragments/footer}"/>
+<footer>
+    <th:block th:include="~{fragments/footer}"/>
+</footer>
 
 </html>

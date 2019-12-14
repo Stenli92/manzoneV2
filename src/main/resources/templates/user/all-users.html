@@ -36,7 +36,6 @@
             <tr class="row mx-auto">
                 <th class="col-md-1 text-center">#</th>
                 <th class="col-md-3 text-center">Username</th>
-                <th class="col-md-2 text-center">Email</th>
                 <th class="col-md-2 text-center">Roles</th>
             </tr>
             </thead>
@@ -45,17 +44,16 @@
                 <tr class="row mx-auto">
                     <th class="col-md-1 text-center" th:utext="${iter.index + 1}"></th>
                     <td class="col-md-3 text-center" th:utext="${users.username}"></td>
-                    <td class="col-md-2 text-center" th:utext="${users.email}"></td>
                     <th:block th:each="authorities : ${users.authorities}">
                         <td class="col-md-2 text-center"
                             th:utext="${authorities.authority}">
                         </td>
                     </th:block>
 
-                    <th:block sec:authorize="hasRole('ROOT')">
+                    <th:block sec:authorize="hasAuthority('ROOT')">
                         <th:block th:if="${#lists.size(users.authorities) == 2}">
                             <td class="col-md-2 text-center">
-                                <form th:action="@{/users/set-user/{id}(id=${users.id})}" method="post">
+                                <form th:action="@{/users/set-user/{username}(username=${users.username})}" method="post">
                                     <button class="btn btn-dark btn-width">USER</button>
                                 </form>
                             </td>
@@ -66,6 +64,14 @@
                         <td class="col-md-2 text-center">
                             <form th:action="@{/users/admin/{username}(username=${users.username})}" method="post" >
                                 <button class="btn btn-dark btn-width">ADMIN</button>
+                            </form>
+                        </td>
+                    </th:block>
+
+                    <th:block sec:authorize="hasAuthority('ROOT')" th:if="${#lists.size(users.authorities) == 1}">
+                        <td class="col-md-2 text-center">
+                            <form th:action="@{/users/delete/{id}(id=${users.id})}" method="post" >
+                                <button class="btn btn-dark btn-width">DELETE</button>
                             </form>
                         </td>
                     </th:block>
@@ -86,6 +92,8 @@
 
 
 </main>
-<th:block th:include="~{fragments/footer}"/>
+<footer>
+    <th:block th:include="~{fragments/footer}"/>
+</footer>
 </body>
 </html>

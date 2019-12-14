@@ -11,6 +11,8 @@ public interface NewsService {
 
     void createNews(CreateNewsModel model);
 
+    void deleteNews(Long id);
+
     NewsServiceModel getNewsById(Long id);
 
     List<NewsServiceModel> getAll();

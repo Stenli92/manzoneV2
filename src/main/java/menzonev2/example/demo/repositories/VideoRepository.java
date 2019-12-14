@@ -13,4 +13,6 @@ public interface VideoRepository extends JpaRepository <Video , Integer> {
     List<Video> findAllByType(String type);
 
     List<Video> findAllByUser(User user);
+
+    Video findById(Long id);
 }

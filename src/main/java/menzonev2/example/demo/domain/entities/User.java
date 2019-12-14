@@ -24,8 +24,6 @@ public class User extends BaseEntity implements UserDetails {
     private String username;
     private String password;
     private String email;
-    private String secretQuestion;
-    private String secretAnswer;
     private Integer balance = (int)(Math.random() * ((MAX_AMOUNT - MIN_AMOUNT) + 1)) + MIN_AMOUNT;
     private List<Video> videos ;
     private List<Offer> offers ;
@@ -49,7 +47,7 @@ public class User extends BaseEntity implements UserDetails {
 
 
     @Override
-    @ManyToMany(targetEntity = Role.class, fetch = FetchType.EAGER)
+    @ManyToMany(targetEntity = Role.class, fetch = FetchType.EAGER )
     @JoinTable(
             name = "users_roles",
             joinColumns = @JoinColumn(
@@ -109,23 +107,6 @@ public class User extends BaseEntity implements UserDetails {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    @Column(nullable = false)
-    public String getSecretQuestion() {
-        return secretQuestion;
-    }
-
-    public void setSecretQuestion(String secretQuestion) {
-        this.secretQuestion = secretQuestion;
-    }
-    @Column(nullable = false)
-    public String getSecretAnswer() {
-        return secretAnswer;
-    }
-
-    public void setSecretAnswer(String secretAnswer) {
-        this.secretAnswer = secretAnswer;
     }
 
     @Column(nullable = false)

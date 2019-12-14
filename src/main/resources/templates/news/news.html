@@ -42,19 +42,6 @@
                 </tr>
         </table>
 
-        <div sec:authorize="hasAuthority('ADMIN')">
-            <div class="button-holder d-flex justify-content-center">
-                <a href="/news/create-news">
-                    <h2 style="color: #fff">Upload News</h2>
-                </a>
-            </div>
-
-        </div>
-
-
-
-
-
         <th:outputText value="&lt;/div&gt;" escape="false" rendered="#{status.index % 4 == 1}"/>
 
         </form>
@@ -66,6 +53,13 @@
                         <a  th:utext="${news.date}"  th:width="300"></a>
                         <a  th:utext="${news.title}" th:width="300" th:href="@{/news/news/{id}(id=${news.id})}"></a>
 
+                    <th:block sec:authorize="hasAuthority('ADMIN')">
+                    <td class="col-md-2 text-center">
+                        <form th:action="@{/news/delete-news/{id}(id=${news.id})}" method="post" >
+                            <button class="btn btn-dark btn-width">DELETE</button>
+                        </form>
+                    </td>
+                    </th:block>
                     </td>
 <!--                    <td class="col-md-1 text-center"  style="background-color: #5a6268">-->
 <!--                        <a  th:utext="${news.title}" th:width="300" th:href="@{/news/news/{id}(id=${news.id})}"></a>-->
@@ -78,7 +72,9 @@
     </div>
 
 
-    <th:block th:include="~{fragments/footer}"/>
 </main>
+<footer>
+    <th:block th:include="~{fragments/footer}"/>
+</footer>
 </body>
 </html>

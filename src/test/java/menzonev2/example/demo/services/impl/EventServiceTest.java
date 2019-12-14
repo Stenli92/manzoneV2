@@ -1,33 +1,49 @@
 package menzonev2.example.demo.services.impl;
 
+import menzonev2.example.demo.domain.services.models.SessionUserModel;
 import menzonev2.example.demo.repositories.EventRepository;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
+import menzonev2.example.demo.services.EventService;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
 
-import static org.junit.jupiter.api.Assertions.*;
+@SpringBootTest
+@RunWith(SpringRunner.class)
+public class EventServiceTest {
 
-class EventServiceTest {
+    @Autowired
+    private EventService eventService;
 
-    EventRepository eventRepository;
+    @Mock
+    EventRepository mockEventRepository;
 
-    @BeforeEach
-    void setUp() {
 
-        eventRepository = Mockito.mock(EventRepository.class);
+    @Test(expected = NullPointerException.class)
+    public void createEventWithInvalidValue_shouldThrowException() {
+
+        eventService.createEvent(null);
+        verify(mockEventRepository.save(any()));
 
 
     }
 
-    @Test
-    void createEvent() {
+    @Test(expected = Exception.class)
+    public void getAllEventsByUserWithInvalidValue_ThrowException() {
+        SessionUserModel userModel = new SessionUserModel();
+
+        eventService.getAllUserEvents(userModel);
+        verify(mockEventRepository.save(any()));
     }
 
-    @Test
-    void getAllUserEvents() {
-    }
+    @Test(expected = IllegalArgumentException.class)
+    public void getUserWithInvalidId_ShouldThrowNullpointer() {
 
-    @Test
-    void getByID() {
+        eventService.getByID(null);
+        mockEventRepository.save(any());
     }
 }

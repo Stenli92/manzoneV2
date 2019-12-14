@@ -2,6 +2,8 @@ package menzonev2.example.demo.web.controllers;
 
 import menzonev2.example.demo.domain.entities.User;
 import menzonev2.example.demo.domain.entities.Video;
+import menzonev2.example.demo.domain.services.models.SessionUserModel;
+import menzonev2.example.demo.domain.services.models.VideoServiceModel;
 import menzonev2.example.demo.repositories.VideoRepository;
 import menzonev2.example.demo.services.VideoService;
 import menzonev2.example.demo.web.models.CreateVideoModel;
@@ -11,10 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -54,8 +53,7 @@ public class VideoController {
     @GetMapping("/music-videos")
     public String musicVideos(Model model){
 
-        List<Video> videos = this.videoRepository.findAllByType("Music");
-
+        List<VideoServiceModel> videos = this.videoService.getAllVideosForMusic();
         model.addAttribute("videos" , videos);
 
         return "/videos/music-videos.html";
@@ -64,7 +62,7 @@ public class VideoController {
     @GetMapping("/sport-videos")
     public String sportVideos(Model model){
 
-        List<Video> videos = this.videoRepository.findAllByType("Sport");
+        List<VideoServiceModel> videos = this.videoService.getAllVideosForSport();
 
         model.addAttribute("videos" , videos);
 
@@ -79,13 +77,21 @@ public class VideoController {
     }
 
     @PostMapping("/uploadvideo")
-    public String uploadVideoConfirm(@Valid @ModelAttribute("videoModel") CreateVideoModel model , BindingResult result){
+    public String uploadVideoConfirm(@Valid @ModelAttribute("videoModel") CreateVideoModel model , BindingResult result,
+    Model errorModel){
 
         if(result.hasErrors()){
 
             return "/videos/upload-video.html";
         }
 
+        if (!this.videoService.videoIsPresentInDB(model)){
+
+            errorModel.addAttribute("error" , "This video is already uploaded");
+
+            return "/videos/upload-video.html";
+
+        }
 
         this.videoService.upload(model);
 
@@ -98,13 +104,24 @@ public class VideoController {
 
         HttpSession session = request.getSession(true);
 
-        User user = (User) session.getAttribute("user");
+        SessionUserModel user = (SessionUserModel) session.getAttribute("user");
 
-        List<CreateVideoModel> videos = this.videoService.getAllVideosByUser(user);
+        List<VideoServiceModel> videos = this.videoService.getAllVideosByUser(user);
 
         model.addAttribute("videos" , videos);
 
+
         return "/videos/myvideos.html";
     }
+
+//    @PostMapping("/delete-video/{id}")
+//    public String deleteVideo(@PathVariable("id") Long id){
+//
+//        System.out.println();
+//
+//        this.videoService.deleteVideo(id);
+//
+//        return "redirect:/videos/videos";
+//    }
 
 }

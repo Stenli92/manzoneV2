@@ -113,4 +113,13 @@ public class NewsController {
         return "/news/current-news.html";
     }
 
+    @PostMapping("/delete-news/{id}")
+    public String deleteNews(@PathVariable("id") Long id){
+
+        this.newsService.deleteNews(id);
+
+
+        return "redirect:/news/news";
+    }
+
 }

@@ -24,12 +24,7 @@ public class RegisterUserServiceModel {
     @NotEmpty(message = "Email field cannot be empty")
     @Pattern(regexp= EMAIL_PATTERN , message = "The email you inserted is not valid")
     private String email;
-    @NotEmpty(message = "Field cannot be empty")
-    @Size(min = 3 , max = 15 , message = "Field have between 3 and 15 digits")
-    private String secretQuestion;
-    @NotEmpty(message = "Field cannot be empty")
-    @Size(min = 3 , max = 15 , message = "Field should have between 3 and 15 digits")
-    private String secretAnswer;
+
 
     public RegisterUserServiceModel() {
     }
@@ -66,19 +61,4 @@ public class RegisterUserServiceModel {
         this.email = email;
     }
 
-    public String getSecretQuestion() {
-        return secretQuestion;
-    }
-
-    public void setSecretQuestion(String secretQuestion) {
-        this.secretQuestion = secretQuestion;
-    }
-
-    public String getSecretAnswer() {
-        return secretAnswer;
-    }
-
-    public void setSecretAnswer(String secretAnswer) {
-        this.secretAnswer = secretAnswer;
-    }
 }

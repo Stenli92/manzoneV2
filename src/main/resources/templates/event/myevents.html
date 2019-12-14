@@ -8,7 +8,7 @@
 
     <div class="container">
         <div class="text-center mb-3">
-            <h4 class="text-white mt-2">Welcome to the arena, <span sec:authentication="name"></span></h4>
+            <h4 class="text-white mt-2">Welcome to the arena,<p th:text="${session.user.getUsername()}"></p></h4>
         </div>
 
         <form class="mx-auto w-15" th:action="@{/events/myevents}" th:method="post">
@@ -59,7 +59,9 @@
     </div>
 
 
-    <th:block th:include="~{fragments/footer}"/>
 </main>
+<footer>
+    <th:block th:include="~{fragments/footer}"/>
+</footer>
 </body>
 </html>

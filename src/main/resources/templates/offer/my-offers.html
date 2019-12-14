@@ -30,10 +30,6 @@
                     <td class="col-md-2 text-center" th:text="${tshirt.size}"></td>
                     <td class="col-md-2 text-center" th:text="${tshirt.color}"></td>
                     <td class="col-md-2 text-center" th:text="${tshirt.price}"></td>
-                    <td class="col-md-2 text-center" th:action="@{/events/buyTicket} ">
-                        <a class="btn btn-info mb-2" th:width="300">Add to Card</a>
-                    </td>
-
                 </tr>
 
             </th:block>
@@ -46,7 +42,10 @@
     </div>
 
 
-    <th:block th:include="~{fragments/footer}"/>
+
 </main>
+<footer>
+    <th:block th:include="~{fragments/footer}"/>
+</footer>
 </body>
 </html>

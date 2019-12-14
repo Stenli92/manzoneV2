@@ -53,4 +53,9 @@ public class NewsServiceImpl implements NewsService {
     public NewsServiceModel getNewsById(Long id) {
         return this.maper.map(this.newsRepository.findById(id) , NewsServiceModel.class);
     }
+
+    @Override
+    public void deleteNews(Long id) {
+        this.newsRepository.delete(this.newsRepository.findById(id));
+    }
 }

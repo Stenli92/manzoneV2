@@ -1,9 +1,9 @@
 package menzonev2.example.demo.services.impl;
 
-import menzonev2.example.demo.domain.entities.Event;
 import menzonev2.example.demo.domain.entities.Offer;
 import menzonev2.example.demo.domain.entities.Role;
 import menzonev2.example.demo.domain.entities.User;
+import menzonev2.example.demo.domain.services.models.SessionUserModel;
 import menzonev2.example.demo.domain.services.models.UserServiceModel;
 import menzonev2.example.demo.errors.CheckForUsernameNameException;
 import menzonev2.example.demo.repositories.EventRepository;
@@ -14,6 +14,9 @@ import menzonev2.example.demo.services.RoleService;
 import menzonev2.example.demo.services.UserService;
 import menzonev2.example.demo.services.ValidationService;
 import menzonev2.example.demo.web.models.CartModel;
+import menzonev2.example.demo.web.models.RegisterUserServiceModel;
+import menzonev2.example.demo.web.models.UpdateBalanceModel;
+import menzonev2.example.demo.web.models.UpdatePassModel;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -23,6 +26,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -40,11 +45,15 @@ public class UserServiceImpl implements UserService {
     private final OfferRepository offerRepository;
     private final EventRepository eventRepository;
     private final RoleService roleService;
+    private final BCryptPasswordEncoder encoder;
+    private final HttpServletRequest request;
+
+
 
     @Autowired
     public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository,
                            ModelMapper mapper, BCryptPasswordEncoder passwordEncoder,
-                           ValidationService authValidationService, OfferRepository offerRepository, EventRepository eventRepository, RoleService roleService) {
+                           ValidationService authValidationService, OfferRepository offerRepository, EventRepository eventRepository, RoleService roleService, BCryptPasswordEncoder encoder, HttpServletRequest request) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.mapper = mapper;
@@ -53,27 +62,51 @@ public class UserServiceImpl implements UserService {
         this.offerRepository = offerRepository;
         this.eventRepository = eventRepository;
         this.roleService = roleService;
+        this.encoder = encoder;
+        this.request = request;
     }
 
 
     @Override
-    public String register(UserServiceModel userServiceModel) {
-
+    public String register(RegisterUserServiceModel userServiceModel ) {
 
 
         User user = this.mapper.map(userServiceModel, User.class);
+
         if (this.userRepository.count() == 0) {
 
             this.roleService.seedRolesInDB();
 
             user.setAuthorities(new LinkedHashSet<>(this.roleRepository.findAll()));
         } else {
+
             user.setAuthorities(new HashSet<>(Set.of(this.roleRepository.findByAuthority("USER"))));
         }
 
         user.setPassword(this.passwordEncoder.encode(userServiceModel.getPassword()));
         this.userRepository.saveAndFlush(user);
         return "redirect: /login";
+    }
+
+    @Override
+    public boolean confirmPassValidation(SessionUserModel userModel, UpdateBalanceModel model) {
+
+        User user = this.userRepository.findByUsername(userModel.getUsername()).orElse(null);
+
+        String pass = encoder.encode(model.getPassword());
+
+        if (!pass.equals(user.getPassword())){
+
+            return false;
+        }
+
+        if (!model.getPassword().equals(model.getConfirmPass())){
+
+            return false;
+
+        }
+
+        return true;
     }
 
 //    @Override
@@ -104,6 +137,33 @@ public class UserServiceImpl implements UserService {
         return this.mapper.map(user , UserServiceModel.class);
     }
 
+    @Override
+    public void updatePassword(SessionUserModel user , UpdatePassModel model) {
+
+        System.out.println();
+
+        User usertoUpdate = this.mapper.map(user , User.class);
+        usertoUpdate.setPassword(encoder.encode(model.getNewPass()));
+        this.userRepository.save(usertoUpdate);
+    }
+
+
+    @Override
+    public void setNewBalance(SessionUserModel userModel, UpdateBalanceModel model) {
+        Integer newBalace = userModel.getBalance() + model.getMoneyToInsert();
+
+        User user = this.userRepository.findByUsername(userModel.getUsername()).orElse(null);
+
+        user.setBalance(newBalace);
+
+        HttpSession session = request.getSession(true);
+
+        ((SessionUserModel) session.getAttribute("user")).setBalance(newBalace);
+
+        System.out.println();
+
+        this.userRepository.save(user);
+    }
 
     public boolean checkIfUserExists(String username) {
 
@@ -111,13 +171,6 @@ public class UserServiceImpl implements UserService {
 
     }
 
-    public void updateUserBalance(String username, Integer balance) {
-        User user = this.userRepository.findByUsername(username).orElse(null);
-
-        user.setBalance(balance);
-
-        this.userRepository.save(user);
-    }
 
     public void removeUser(UserServiceModel user) {
 
@@ -139,24 +192,7 @@ public class UserServiceImpl implements UserService {
             if (cartModel.getType().equals("Football")
                     ||cartModel.getType().equals("Concert")  ){
 
-                for (User user : userList) {
-
-
-                    List<Event> events = user.getEvents();
-
-                    for (Event event : events) {
-
-                        if (event.getName().equals(cartModel.getName())){
-
-                            user.setBalance((int) (user.getBalance() + cartModel.getPrice()));
-
-                            this.userRepository.save(user);
-                        }
-
-                    }
-
-
-                }
+                continue;
 
             }else {
 
@@ -171,7 +207,8 @@ public class UserServiceImpl implements UserService {
 
                             user.setBalance((int) (user.getBalance() + cartModel.getPrice()));
 
-                            this.userRepository.save(user);
+                            this.offerRepository.delete(offer);
+
                         }
 
                     }
@@ -223,18 +260,34 @@ public class UserServiceImpl implements UserService {
         User userToUpdate = this.userRepository.findByUsername(user.getUsername())
                 .orElseThrow(()->new CheckForUsernameNameException("No such user found"));
 
-        UserServiceModel userServiceModel = this.mapper.map(userToUpdate , UserServiceModel.class);
+            Role userRole = this.roleRepository.findByAuthority("USER");
+            Role adminRole = this.roleRepository.findByAuthority("ADMIN");
 
-            userServiceModel.getAuthorities().clear();
-            userServiceModel.getAuthorities().add(this.roleService.finByAuthority("USER"));
-            userServiceModel.getAuthorities().add(this.roleService.finByAuthority("ADMIN"));
-            System.out.println();
+            userToUpdate.getAuthorities().clear();
+            userToUpdate.getAuthorities().add(userRole);
+            userToUpdate.getAuthorities().add(adminRole);
 
-            this.userRepository.saveAndFlush(this.mapper.map(userServiceModel , User.class));
+
+            this.userRepository.save(userToUpdate);
 
 
     }
 
+    @Override
+    public void setToUser(UserServiceModel user) {
+
+        User userToUpdate = this.userRepository.findByUsername(user.getUsername())
+                .orElseThrow(()->new CheckForUsernameNameException("No such user found"));
+
+        Role userRole = this.roleRepository.findByAuthority("USER");
+        System.out.println();
+
+        userToUpdate.getAuthorities().clear();
+        userToUpdate.getAuthorities().add(userRole);
+
+        this.userRepository.save(userToUpdate);
+
+    }
 
     public List<UserServiceModel> getAllUsers() {
 
@@ -244,6 +297,15 @@ public class UserServiceImpl implements UserService {
 
     }
 
+    @Override
+    public void deleteUser(Long id) {
+
+
+        User user = this.userRepository.findById(id);
+
+        this.userRepository.delete(user);
+
+    }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
