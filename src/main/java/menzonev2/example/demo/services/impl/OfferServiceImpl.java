@@ -15,6 +15,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -68,8 +69,19 @@ public class OfferServiceImpl implements OfferService {
 
         List<Offer> offers = this.offerRepository.findAllByType("T-Shirt");
 
-        return offers.stream().filter(e -> !e.getUser().getUsername().equals(user.getUsername())).
-                map(e -> mapper.map(e, OfferServiceModel.class)).collect(Collectors.toList());
+        List<Offer> offerList = new ArrayList<>();
+
+        for (Offer offer : offers) {
+
+            if (!offer.getUser().getUsername().equals(user.getUsername())){
+
+                offerList.add(offer);
+            }
+
+        }
+
+
+        return offerList.stream().map(e-> this.mapper.map(e , OfferServiceModel.class)).collect(Collectors.toList());
 
     }
 
@@ -79,8 +91,19 @@ public class OfferServiceImpl implements OfferService {
 
         List<Offer> offers = this.offerRepository.findAllByType("Shoe");
 
-        return offers.stream().filter(e -> !e.getUser().getUsername().equals(user.getUsername())).
-                map(e -> mapper.map(e, OfferServiceModel.class)).collect(Collectors.toList());
+        List<Offer> offerList = new ArrayList<>();
+
+        for (Offer offer : offers) {
+
+            if (!offer.getUser().getUsername().equals(user.getUsername())){
+
+                offerList.add(offer);
+            }
+
+        }
+
+
+        return offerList.stream().map(e-> this.mapper.map(e , OfferServiceModel.class)).collect(Collectors.toList());
 
     }
 
@@ -90,8 +113,18 @@ public class OfferServiceImpl implements OfferService {
 
         List<Offer> offers = this.offerRepository.findAllByType("Accessory");
 
-        return offers.stream().filter(e -> !e.getUser().getUsername().equals(user.getUsername())).
-                map(e -> mapper.map(e, OfferServiceModel.class)).collect(Collectors.toList());
+        List<Offer> offerList = new ArrayList<>();
 
+        for (Offer offer : offers) {
+
+            if (!offer.getUser().getUsername().equals(user.getUsername())){
+
+                offerList.add(offer);
+            }
+
+        }
+
+
+        return offerList.stream().map(e-> this.mapper.map(e , OfferServiceModel.class)).collect(Collectors.toList());
     }
 }

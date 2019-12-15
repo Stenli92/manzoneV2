@@ -25,6 +25,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -89,13 +90,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean confirmPassValidation(SessionUserModel userModel, UpdateBalanceModel model) {
+    public boolean confirmPassValidation(SessionUserModel userModel, UpdateBalanceModel model , Model errorModel) {
 
         User user = this.userRepository.findByUsername(userModel.getUsername()).orElse(null);
 
         String pass = encoder.encode(model.getPassword());
 
         if (!pass.equals(user.getPassword())){
+
 
             return false;
         }

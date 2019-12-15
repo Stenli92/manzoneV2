@@ -15,72 +15,72 @@
         <th:outputText value="&lt;div class=&quot;row mb-4 d-flex justify-content-around&quot;&gt;"
                       escape="false" rendered="#{status.index % 4 == 0}"/>
 
-            <script type="text/javascript">
-                function escapeHTML(string) {
-                    var div = document.createElement("div")
-                    div.innerHTML = string
-                    return div.innerText;
-                }
-                $(document).ready(
-                    function () {
-                        $.getJSON("/events/ajax/events",null,  function (response) {
-                            var div = $("#events");
-                            var html = '<table width="100%" id="events-table" cellspacing="10"><tr><th></th><th></th><th>Name</th><th>Location</th><th>Date</th><th>Time</th><th>Price</th></tr>';
+<!--            <script type="text/javascript">-->
+<!--                function escapeHTML(string) {-->
+<!--                    var div = document.createElement("div")-->
+<!--                    div.innerHTML = string-->
+<!--                    return div.innerText;-->
+<!--                }-->
+<!--                $(document).ready(-->
+<!--                    function () {-->
+<!--                        $.getJSON("/events/ajax/events",null,  function (response) {-->
+<!--                            var div = $("#events");-->
+<!--                            var html = '<table width="100%" id="events-table" cellspacing="10"><tr><th></th><th></th><th>Name</th><th>Location</th><th>Date</th><th>Time</th><th>Price</th></tr>';-->
 
-                            response.forEach(function(event, index){
-                                html  += '' +
-                                    '                <tr>' +
-                                    '                    <td>' + (index+1) + '</td>'+
-                                    '                    <td>';
+<!--                            response.forEach(function(event, index){-->
+<!--                                html  += '' +-->
+<!--                                    '                <tr>' +-->
+<!--                                    '                    <td>' + (index+1) + '</td>'+-->
+<!--                                    '                    <td>';-->
 
-                                var eventTypeImage = "";
-                                if (event.type == "Concert") {
-                                    eventTypeImage = "/img/concert.png";
-                                } else {
-                                    eventTypeImage = "/img/football.png";
-                                }
-                                html +=  '<img src="' + eventTypeImage + '" width="40" height="40" alt="quotes">';
+<!--                                var eventTypeImage = "";-->
+<!--                                if (event.type == "Concert") {-->
+<!--                                    eventTypeImage = "/img/concert.png";-->
+<!--                                } else {-->
+<!--                                    eventTypeImage = "/img/football.png";-->
+<!--                                }-->
+<!--                                html +=  '<img src="' + eventTypeImage + '" width="40" height="40" alt="quotes">';-->
 
 
-                                html +=  '</td>' +
-                                    '                    <td>' + escapeHTML(event.name) + '</td>' +
-                                    ' <td>' + escapeHTML(event.location) + '</td>' +
-                                    ' <td>' + escapeHTML(event.date) + '</td>' +
-                                    ' <td>' + escapeHTML(event.time) + '</td>' +
-                                    '<td>' + escapeHTML(event.price) + '</td>' +
-                                    '<td><a class="btn btn-info mb-2" width="300" href="/cart/buy-ticket/'+event.id+'">Add to cart</a></td>' +
-                                    '</tr>';
-                            })
-                            html += '</table>';
-                            div.html(html);
-                            console.log(response);
-                        })
-                    }
-                )
-            </script>
+<!--                                html +=  '</td>' +-->
+<!--                                    '                    <td>' + escapeHTML(event.name) + '</td>' +-->
+<!--                                    ' <td>' + escapeHTML(event.location) + '</td>' +-->
+<!--                                    ' <td>' + escapeHTML(event.date) + '</td>' +-->
+<!--                                    ' <td>' + escapeHTML(event.time) + '</td>' +-->
+<!--                                    '<td>' + escapeHTML(event.price) + '</td>' +-->
+<!--                                    '<td><a class="btn btn-info mb-2" width="300" href="/cart/buy-ticket/'+event.id+'">Add to cart</a></td>' +-->
+<!--                                    '</tr>';-->
+<!--                            })-->
+<!--                            html += '</table>';-->
+<!--                            div.html(html);-->
+<!--                            console.log(response);-->
+<!--                        })-->
+<!--                    }-->
+<!--                )-->
+<!--            </script>-->
 
-<!--        <table>-->
-<!--            <th:block th:each="tshirt , iter : ${offers} ">-->
+        <table>
+            <th:block th:each="tshirt , iter : ${offers} ">
 
-<!--                <tr class="row mx-auto">-->
-<!--                    <th class="col-md-1 text-center" th:utext="${iter.index + 1}"></th>-->
-<!--                    <td class="col-md-3">-->
-<!--                        <div class="text-center"><img th:src="@{/img/t-shirt.png}" width="40" height="40"-->
-<!--                                                      alt="quotes">-->
-<!--                        </div>-->
-<!--                    </td>-->
-<!--                    <td class="col-md-3 text-center" th:text="${tshirt.name}"></td>-->
-<!--                    <td class="col-md-2 text-center" th:text="${tshirt.type}"></td>-->
-<!--                    <td class="col-md-2 text-center" th:text="${tshirt.size}"></td>-->
-<!--                    <td class="col-md-2 text-center" th:text="${tshirt.color}"></td>-->
-<!--                    <td class="col-md-2 text-center" th:text="${tshirt.price}"></td>-->
-<!--                    <td class="col-md-2 text-center" th:action="@{/events/buyTicket} ">-->
-<!--                        <a class="btn btn-info mb-2" th:width="300" th:href="@{/cart/buy-offer/{id}(id=${tshirt.id})}">Add to Cart</a>-->
-<!--                    </td>-->
+                <tr class="row mx-auto">
+                    <th class="col-md-1 text-center" th:utext="${iter.index + 1}"></th>
+                    <td class="col-md-3">
+                        <div class="text-center"><img th:src="@{/img/t-shirt.png}" width="40" height="40"
+                                                      alt="quotes">
+                        </div>
+                    </td>
+                    <td class="col-md-3 text-center" th:text="${tshirt.name}"></td>
+                    <td class="col-md-2 text-center" th:text="${tshirt.type}"></td>
+                    <td class="col-md-2 text-center" th:text="${tshirt.size}"></td>
+                    <td class="col-md-2 text-center" th:text="${tshirt.color}"></td>
+                    <td class="col-md-2 text-center" th:text="${tshirt.price}"></td>
+                    <td class="col-md-2 text-center" th:action="@{/events/buyTicket} ">
+                        <a class="btn btn-info mb-2" th:width="300" th:href="@{/cart/buy-offer/{id}(id=${tshirt.id})}">Add to Cart</a>
+                    </td>
 
-<!--                </tr>-->
+                </tr>
 
-<!--            </th:block>-->
+            </th:block>
         </table>
 
         <th:outputText value="&lt;/div&gt;" escape="false" rendered="#{status.index % 4 == 1}"/>

@@ -74,6 +74,7 @@ public class EventController {
         return this.eventRepository.findAll().stream()
                 .map(e-> this.modelMapper.map(e , CreateEventModel.class)).collect(Collectors.toList());
     }
+    
 
 
 

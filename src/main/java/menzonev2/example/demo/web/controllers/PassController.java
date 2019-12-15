@@ -45,14 +45,20 @@ public class PassController {
     }
 
     @PostMapping("/update-password")
-    public String updatePass(@ModelAttribute UpdatePassModel model) {
+    public String updatePass(@ModelAttribute UpdatePassModel model , Model errorModel) {
 
         HttpSession session = request.getSession(true);
 
         SessionUserModel user = (SessionUserModel) session.getAttribute("user");
 
 
-        this.validationService.passValidation(model.getOldPassword() , model.getNewPass() , model.getConfirmPass());
+        if (!this.validationService.passValidation(model.getOldPassword() , model.getNewPass() , model.getConfirmPass())){
+            errorModel.addAttribute(  "error" , "Password is wrong or they dont'match");
+
+            return "/user/update-password.html";
+
+
+        }
 
         System.out.println();
 

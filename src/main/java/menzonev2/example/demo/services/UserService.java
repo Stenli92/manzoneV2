@@ -17,7 +17,7 @@ public interface UserService extends UserDetailsService {
 
     String register(RegisterUserServiceModel user);
 
-    boolean confirmPassValidation(SessionUserModel userModel , UpdateBalanceModel model);
+    boolean confirmPassValidation(SessionUserModel userModel , UpdateBalanceModel model, Model errorModel);
 
     void setNewBalance(SessionUserModel userModel , UpdateBalanceModel model);
 

@@ -8,6 +8,7 @@ import menzonev2.example.demo.web.models.UpdateBalanceModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -51,14 +52,17 @@ public class ProfileController {
     }
 
     @PostMapping("/update-balance")
-    public String updateBalanceCommit(@ModelAttribute UpdateBalanceModel updateBalanceModel){
+    public String updateBalanceCommit(@ModelAttribute UpdateBalanceModel updateBalanceModel , Model model){
 
         HttpSession session = request.getSession(true);
 
         SessionUserModel user = (SessionUserModel) session.getAttribute("user");
 
 
-        if (this.userService.confirmPassValidation(user , updateBalanceModel)){
+        if (!this.userService.confirmPassValidation(user , updateBalanceModel , model)){
+
+            model.addAttribute(  "error" , "Password is wrong or they dont'match");
+
 
             return "/user/update-balance.html";
         }
